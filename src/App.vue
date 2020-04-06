@@ -1,32 +1,52 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <v-app>
+    <v-app-bar
+      app
+      color="primary"
+      absolute
+      elevate-on-scroll
+      dark
+    >
+
+      <v-toolbar-title>Title</v-toolbar-title>
+
+      <v-spacer></v-spacer>
+
+      <v-btn icon>
+        <v-icon>mdi-magnify</v-icon>
+      </v-btn>
+    </v-app-bar>
+    <v-content>
+      <v-container-fluid>
+      <router-view></router-view>
+      </v-container-fluid>
+    </v-content>
+    <v-bottom-navigation
+  >
+    <v-btn to="/profile" value="profile">
+      <span>Profile</span>
+      <v-icon>mdi-account</v-icon>
+    </v-btn>
+
+    <v-btn to="/" value="favorites">
+      <span>Home</span>
+      <v-icon>mdi-home</v-icon>
+    </v-btn>
+
+    <v-btn to="/login" value="login">
+      <span>Login</span>
+      <v-icon>mdi-login</v-icon>
+    </v-btn>
+  </v-bottom-navigation>
+  </v-app>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+<script>
+export default {
+  name: 'App',
+  data () {
+    return {
     }
   }
-}
-</style>
+};
+</script>

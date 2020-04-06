@@ -1,0 +1,45 @@
+<template>
+  <tr>
+    <td>{{ event.game_start | moment("DD MMMM, HH:mm")}}</td>
+    <td>
+      <tr>{{ event.opp_1_name }}</tr>
+      <tr>{{ event.opp_2_name }}</tr>
+    </td>
+    <td>
+      <tr
+      v-for="eachWay in eachWayOdds"
+      :key="eachWay.oc_pointer"
+      >
+        {{ eachWay.oc_rate }}
+      </tr>
+    </td>
+  </tr>
+</template>
+
+<script>
+export default {
+  props: {
+    event: Object
+  },
+  data() {
+    return {
+    }
+  },
+  computed: {
+    eachWayOdds () {
+      return this.event.game_oc_list.filter(function(obj) {
+        return obj.oc_group_name.toLowerCase().includes('1x2');
+      })
+    },
+    handicapOdds () {
+      return this.event.game_oc_list.filter(function(obj) {
+        return obj.oc_group_name.toLowerCase().includes('handicap');
+      })
+    }
+  }
+}
+</script>
+
+<style>
+
+</style>
