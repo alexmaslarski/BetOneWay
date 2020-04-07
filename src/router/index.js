@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+// Pages
+import Home from '@/views/Home.vue'
+import Event from '@/views/Event.vue'
+// Components
 import Login from '@/components/Login.vue'
 import Profile from '@/components/Profile.vue'
 
@@ -21,6 +24,11 @@ Vue.use(VueRouter)
     path: '/profile',
     name: 'Profile',
     component: Profile
+  },
+  {
+    path: '/event/:id',
+    name: 'Event',
+    component: Event
   }
 ]
 

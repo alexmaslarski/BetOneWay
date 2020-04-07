@@ -1,5 +1,5 @@
 <template>
-  <tr>
+  <router-link :to="{ name: 'Event', params: { id: event.game_id }}" tag="tr">
     <td>{{ event.game_start | moment("DD MMMM, HH:mm")}}</td>
     <td>
       <tr>{{ event.opp_1_name }}</tr>
@@ -13,7 +13,7 @@
         {{ eachWay.oc_rate }}
       </tr>
     </td>
-  </tr>
+  </router-link>
 </template>
 
 <script>

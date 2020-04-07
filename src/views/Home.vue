@@ -6,7 +6,7 @@
 
 <script>
 // @ is an alias to /src
-import EventList from '@/components/EventList.vue';
+import EventList from '@/components/EventListing/EventList.vue';
 export default {
   name: 'Home',
   components: {

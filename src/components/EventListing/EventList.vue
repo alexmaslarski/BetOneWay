@@ -2,7 +2,7 @@
     <div class="event-list">
       <v-container>
       <v-card
-      v-for="tournament in tournaments"
+      v-for="tournament in getTournaments"
       :key="tournament.tournament_id"
       max-width="100%"
       class="mx-auto"
@@ -38,30 +38,26 @@
 </template>
 
 <script>
-import axios from 'axios';
-import EventItem from '@/components/EventItem.vue';
+import { mapGetters } from 'vuex';
+import { mapActions } from 'vuex';
+import EventItem from './EventItem.vue';
 export default {
   components: {
     'app-event-item': EventItem
   },
-  data() {
-    return {
-      tournaments: []
-    }
+  computed: {
+    ...mapGetters([
+      'getTournaments',
+      'getTournamentEvents'
+    ])
+  },
+  methods: {
+    ...mapActions([
+      'loadTournaments'
+    ])
   },
   created() {
-    axios.get('/events/1/0/sub/20/line/en')
-      .then(res => {
-        const data = res.data.body;
-        for (const key in data) {
-            this.tournaments.push(data[key])
-        }
-        console.log(this.tournaments);
-        
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    this.$store.dispatch('loadTournaments')
   }
 }
 </script>
