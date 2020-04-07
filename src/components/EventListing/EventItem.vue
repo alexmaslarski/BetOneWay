@@ -30,11 +30,6 @@ export default {
       return this.event.game_oc_list.filter(function(obj) {
         return obj.oc_group_name.toLowerCase().includes('1x2');
       })
-    },
-    handicapOdds () {
-      return this.event.game_oc_list.filter(function(obj) {
-        return obj.oc_group_name.toLowerCase().includes('handicap');
-      })
     }
   }
 }

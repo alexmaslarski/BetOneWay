@@ -1,11 +1,15 @@
 <template>
-  <div class="Event">
-    <h2>Tournament ID: {{ tournament_id }}</h2>
-    <h2>ID: {{ id }}</h2>
-    <p> {{ getEvent }} </p>
-    <button @click="loadEvent" >load event</button>
-    <app-event-heading></app-event-heading>
-    <app-event-markets></app-event-markets>
+  <div class="event">
+      <app-event-heading
+    :team1="getEvent.opp_1_name"
+    :team2="getEvent.opp_2_name"
+    :tournament="getEvent.tournament_name"
+    :date="getEvent.game_start"
+    >
+    </app-event-heading>
+    <app-event-markets
+    :markets="getMarkets"
+    ></app-event-markets>
   </div>
 </template>
 
@@ -23,19 +27,18 @@ export default {
   },
   data() {
     return {
-      tournament_id: this.$route.params.tournament_id,
       id: this.$route.params.id
     }
   },
   watch: {
     '$route'(to) {
-      this.tournament_id = to.params.tournament_id
       this.id = to.params.id;
     }
   },
   computed: {
     ...mapGetters([
-      'getEvent'
+      'getEvent',
+      'getMarkets'
     ])
   },
   methods: {
@@ -44,7 +47,7 @@ export default {
     ])
   },
   created() {
-    this.$store.dispatch('loadEvent', this.$route.params.id)
+    this.$store.dispatch('loadEvent', this.id)
   }
 }
 </script>
