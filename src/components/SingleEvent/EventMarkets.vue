@@ -1,28 +1,38 @@
 <template>
   <div class="markets">
-    <v-card
-    v-for="market in markets"
-    :key="market.oc_group_name"
-    max-width="100%"
-    class="mx-auto"
+    <v-expansion-panels
+    multiple
+    focusable
+    tile
     >
-      <v-card-title class="white--text green">{{ market[0].oc_group_name }}</v-card-title>
-      <v-container
-      fluid
+      <v-expansion-panel
+      v-for="market in markets"
+      :key="market.oc_group_name"
       >
-      <v-row>
-        <v-col
-        v-for="option in market"
-        :key="option.oc_pointer"
-        cols="4"
-        class="text-center"
+        <v-expansion-panel-header
         >
-          <p>{{ option.oc_rate }}</p>
-          <p>{{ option.oc_name }}</p>
-        </v-col>
-      </v-row>
-      </v-container>
-    </v-card>
+        {{ market[0].oc_group_name }}
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <v-container
+          fluid
+          class="pa-0"
+          >
+          <v-row>
+            <v-col
+              v-for="option in market"
+              :key="option.oc_pointer"
+              cols="4"
+              class="text-center"
+              >
+                <p>{{ option.oc_rate }}</p>
+                <p>{{ option.oc_name }}</p>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
   </div>
 </template>
 
@@ -33,7 +43,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>

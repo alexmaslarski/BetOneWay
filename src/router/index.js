@@ -3,9 +3,7 @@ import VueRouter from 'vue-router'
 // Pages
 import Home from '@/views/Home.vue'
 import Event from '@/views/Event.vue'
-// Components
-import Login from '@/components/Login.vue'
-import Profile from '@/components/Profile.vue'
+import Profile from '@/views/Profile.vue'
 
 Vue.use(VueRouter)
 
@@ -14,11 +12,6 @@ Vue.use(VueRouter)
     path: '/',
     name: 'Home',
     component: Home
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    component: Login
   },
   {
     path: '/profile',

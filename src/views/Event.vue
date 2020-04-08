@@ -14,9 +14,7 @@
 </template>
 
 <script>
-// @ is an alias to /src
 import { mapGetters } from 'vuex';
-import { mapActions } from 'vuex';
 import EventHeading from '@/components/SingleEvent/EventHeading.vue';
 import EventMarkets from '@/components/SingleEvent/EventMarkets.vue';
 export default {
@@ -39,11 +37,6 @@ export default {
     ...mapGetters([
       'getEvent',
       'getMarkets'
-    ])
-  },
-  methods: {
-    ...mapActions([
-      'loadEvent'
     ])
   },
   created() {

@@ -1,6 +1,7 @@
 <template>
   <v-card
   dark
+  tile
   >
     <div class="d-flex justify-space-between">
     <v-card-subtitle>{{tournament}}</v-card-subtitle>

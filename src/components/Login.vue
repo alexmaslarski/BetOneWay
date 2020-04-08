@@ -1,5 +1,8 @@
 <template>
-  <section id="firebaseui-auth-container"></section>
+  <div class="login">
+        <section id="firebaseui-auth-container"></section>
+        <p>BetOneWay uses Firebase as an authentication provider. This helps us make sure that your personal information is well protected and in good hands</p>
+  </div>
 </template>
 
 <script>
@@ -8,7 +11,8 @@ import * as firebaseui from 'firebaseui'
 import "firebaseui/dist/firebaseui.css";
 
 export default {
-  created() {
+  name: 'Login',
+  mounted() {
     var uiConfig = {
       signInSuccessUrl: "/profile",
       signInFlow: 'popup',
