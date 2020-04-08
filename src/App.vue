@@ -7,15 +7,24 @@
       color="primary"
       elevate-on-scroll
       dark
-      clipped-left
+      clipped-right
     >
-      <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
-      <v-toolbar-title>Title</v-toolbar-title>
+      <v-btn
+      v-if="$route.path!='/'"
+      icon
+      @click="goBack"
+      >
+        <v-icon>mdi-chevron-left</v-icon>
+      </v-btn>
+      <v-toolbar-title>{{ $route.name }}</v-toolbar-title>
 
       <v-spacer></v-spacer>
-
-      <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
+      <v-btn
+      icon
+      @click="drawer = true"
+      >
+        <v-icon v-if="getUser">mdi-menu</v-icon>
+        <v-icon v-else>mdi-login</v-icon>
       </v-btn>
     </v-app-bar>
 
@@ -24,6 +33,7 @@
     app
     v-model="drawer"
     clipped
+    right
     >
     <app-nav-drawer-content v-if="getUser"></app-nav-drawer-content>
       
@@ -37,26 +47,18 @@
 
     <!-- Content -->
     <v-content>
+      <transition name="slide" mode="out-in">
       <router-view></router-view>
+      </transition>
     </v-content>
 
     <!-- Bottom nav -->
     <v-bottom-navigation
     app
     >
-    <v-btn to="/profile" value="profile">
-      <span>Profile</span>
-      <v-icon>mdi-account</v-icon>
-    </v-btn>
-
     <v-btn to="/" value="Home">
       <span>Home</span>
       <v-icon>mdi-home</v-icon>
-    </v-btn>
-
-    <v-btn to="/login" value="login">
-      <span>Login</span>
-      <v-icon>mdi-login</v-icon>
     </v-btn>
   </v-bottom-navigation>
   </v-app>
@@ -76,7 +78,14 @@ export default {
   data () {
     return {
       drawer: false,
+      transitionName: 'slide-left'
     }
+  },
+   beforeRouteUpdate (to, from, next) {
+    const toDepth = to.path.split('/').length
+    const fromDepth = from.path.split('/').length
+    this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
+    next()
   },
   mounted () {
     firebase.auth().onAuthStateChanged(user => {
@@ -91,7 +100,55 @@ export default {
   methods: {
     logOut() {
       firebase.auth().signOut();
+      this.$router.push({ path: '/' })
+    },
+    goBack() {
+      return this.$router.go(-1);
     }
   }
 };
 </script>
+<style>
+.slide-enter {
+      opacity: 0;
+      /*transform: translateY(20px);*/
+  }
+
+  .slide-enter-active {
+      animation: slide-in 0.5s ease-out forwards;
+      transition: opacity .5s;
+  }
+
+  .slide-leave {
+
+  }
+
+  .slide-leave-active {
+      animation: slide-out 0.5s ease-out forwards;
+      transition: opacity 0.5s;
+      opacity: 0;
+      position: absolute;
+  }
+
+  .slide-move {
+      transition: transform 0.5s;
+  }
+
+  @keyframes slide-in {
+      from {
+          transform: translateY(20px);
+      }
+      to {
+          transform: translateY(0);
+      }
+  }
+
+  @keyframes slide-out {
+      from {
+          transform: translateY(0);
+      }
+      to {
+          transform: translateY(20px);
+      }
+  }
+</style>

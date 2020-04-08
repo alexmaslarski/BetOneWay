@@ -1,27 +1,14 @@
 <template>
-  <div class="card horizontal" style="max-width:400px;margin:0 auto;" v-if="getUser">
-    <div class="card-image" style="margin-top:25px;margin-left:10px;">
-      <img
-        :src="getUser.photoURL"
-        style="width:75px;height:75px;border-radius:50%;border:4px solid #333"
-      />
-    </div>
-    <div class="card-stacked">
-      <div class="card-content">
-        <p>
-          name:
-          <strong>{{getUser.displayName}}</strong>
-          <br />email:
-          <strong>{{getUser.email}}</strong>
-          <br />uid:
-          <strong>{{getUser.uid}}</strong>
-          <br />provider:
-          <strong class="teal-text">{{getUser.providerData[0].providerId}}</strong>
-        </p>
-      </div>
-    </div>
-    <button @click='logOut' >Log Out</button>
-  </div>
+  <v-container>
+    <v-card
+      v-if="getUser"
+      >
+        <v-img :src="getUser.photoURL" alt=""></v-img>
+        <v-card-title>{{ getUser.displayName }}</v-card-title>
+        <v-card-subtitle>{{ getUser.email }}</v-card-subtitle>
+
+      </v-card>
+  </v-container>
 </template>
 
 <script>

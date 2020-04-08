@@ -1,8 +1,7 @@
 <template>
-  <div class="login">
-        <section id="firebaseui-auth-container"></section>
-        <p>BetOneWay uses Firebase as an authentication provider. This helps us make sure that your personal information is well protected and in good hands</p>
-  </div>
+  <v-container>
+    <section id="firebaseui-auth-container"></section>
+  </v-container>
 </template>
 
 <script>
@@ -31,5 +30,11 @@ export default {
 </script>
 
 <style>
-
+  .firebaseui-card-content {
+    padding: 0;
+  }
+  .firebaseui-idp-list {
+    padding-inline-start: 0;
+    padding-left: 0 !important;
+  }
 </style>
