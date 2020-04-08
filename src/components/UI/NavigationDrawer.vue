@@ -8,10 +8,10 @@
     two-line
     >
     <v-list-item-avatar>
-      <img :src="user.photoURL" alt="">
+      <img :src="getUser.photoURL" alt="">
     </v-list-item-avatar>
     <v-list-item-content>
-      <v-list-item-title>{{user.displayName}}</v-list-item-title>
+      <v-list-item-title>{{getUser.displayName}}</v-list-item-title>
       <v-list-item-subtitle to="/profile" >Profile</v-list-item-subtitle>
     </v-list-item-content>
     </v-list-item>
@@ -20,19 +20,17 @@
 </template>
 
 <script>
-import firebase from "firebase";
+import { mapGetters } from 'vuex';
 export default {
   data() {
     return {
       user: null
     }
   },
-  created() {
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        this.user = user;
-      }
-    });
+  computed: {
+    ...mapGetters([
+      'getUser'
+    ])
   }
 }
 </script>

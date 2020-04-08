@@ -25,8 +25,14 @@
     v-model="drawer"
     clipped
     >
-    <app-nav-drawer-content></app-nav-drawer-content>
-      <app-login></app-login>
+    <app-nav-drawer-content v-if="getUser"></app-nav-drawer-content>
+      
+    <app-login v-else ></app-login>
+      <template v-if="getUser" v-slot:append>
+        <div class="pa-2">
+          <v-btn @click='logOut' block>Logout</v-btn>
+        </div>
+      </template>
     </v-navigation-drawer>
 
     <!-- Content -->
@@ -57,6 +63,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import firebase from "firebase";
 import Login from './components/Login.vue'
 import NavDrawer from './components/UI/NavigationDrawer.vue'
@@ -69,15 +76,22 @@ export default {
   data () {
     return {
       drawer: false,
-      user: null
     }
   },
   mounted () {
     firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        this.user = user;
-      }
+      this.$store.dispatch('updateUser', user)
     });
+  },
+    computed: {
+    ...mapGetters([
+      'getUser'
+    ])
+  },
+  methods: {
+    logOut() {
+      firebase.auth().signOut();
+    }
   }
 };
 </script>

@@ -1,8 +1,8 @@
 <template>
-  <div class="card horizontal" style="max-width:400px;margin:0 auto;" v-if="user">
+  <div class="card horizontal" style="max-width:400px;margin:0 auto;" v-if="getUser">
     <div class="card-image" style="margin-top:25px;margin-left:10px;">
       <img
-        :src="user.photoURL"
+        :src="getUser.photoURL"
         style="width:75px;height:75px;border-radius:50%;border:4px solid #333"
       />
     </div>
@@ -10,13 +10,13 @@
       <div class="card-content">
         <p>
           name:
-          <strong>{{user.displayName}}</strong>
+          <strong>{{getUser.displayName}}</strong>
           <br />email:
-          <strong>{{user.email}}</strong>
+          <strong>{{getUser.email}}</strong>
           <br />uid:
-          <strong>{{user.uid}}</strong>
+          <strong>{{getUser.uid}}</strong>
           <br />provider:
-          <strong class="teal-text">{{user.providerData[0].providerId}}</strong>
+          <strong class="teal-text">{{getUser.providerData[0].providerId}}</strong>
         </p>
       </div>
     </div>
@@ -25,7 +25,8 @@
 </template>
 
 <script>
-import firebase from "firebase";
+import { mapGetters } from 'vuex';
+import firebase from 'firebase';
 export default {
   name: 'Profile',
   data() {
@@ -33,12 +34,10 @@ export default {
       user: null
     };
   },
-  created() {
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        this.user = user;
-      }
-    });
+  computed: {
+    ...mapGetters([
+      'getUser'
+    ])
   },
   methods: {
     logOut() {

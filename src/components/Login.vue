@@ -14,7 +14,6 @@ export default {
   name: 'Login',
   mounted() {
     var uiConfig = {
-      signInSuccessUrl: "/profile",
       signInFlow: 'popup',
       signInOptions: [
         firebase.auth.GoogleAuthProvider.PROVIDER_ID,
