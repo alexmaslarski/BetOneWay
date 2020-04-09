@@ -8,6 +8,7 @@
 import * as firebase from "firebase";
 import * as firebaseui from 'firebaseui'
 import "firebaseui/dist/firebaseui.css";
+import { db, auth } from '@/helpers/firebaseConfig'
 
 export default {
   name: 'Login',
@@ -15,9 +16,24 @@ export default {
     var uiConfig = {
       callbacks: {
         signInSuccessWithAuthResult(authResult){
-          console.log(authResult);
+          console.log(authResult.user);
           
-
+          let docRef = db.collection('users').doc(authResult.user.uid);
+          docRef.get().then(function(doc){
+            if (doc.exists) {
+              db.collection('users').doc(authResult.user.uid).update({
+                lastSignIn: authResult.user.metadata.lastSignInTime
+              })
+            }else {
+              db.collection('users').doc(authResult.user.uid).set({
+                name: authResult.user.displayName,
+                id: authResult.user.uid,
+                photoUrl: authResult.user.photoURL,
+                accountCreated: authResult.user.metadata.creationTime,
+                lastSignIn: authResult.user.metadata.lastSignInTime,
+              })
+            }
+          })
         }
       },
       signInFlow: 'popup',
@@ -29,7 +45,7 @@ export default {
     };
     let ui = firebaseui.auth.AuthUI.getInstance();
     if (!ui) {
-    ui = new firebaseui.auth.AuthUI(firebase.auth());
+    ui = new firebaseui.auth.AuthUI(auth);
     }
     ui.start("#firebaseui-auth-container", uiConfig);
   }

@@ -15,4 +15,5 @@ import 'firebase/firestore'
 // Get a Firestore instance
 export const db = firebase
   .initializeApp(config)
-  .firestore()
+  .firestore();
+export const auth = firebase.auth();
