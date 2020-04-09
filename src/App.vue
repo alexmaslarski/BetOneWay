@@ -111,16 +111,11 @@ export default {
 <style>
 .slide-enter {
       opacity: 0;
-      /*transform: translateY(20px);*/
   }
 
   .slide-enter-active {
       animation: slide-in 0.5s ease-out forwards;
       transition: opacity .5s;
-  }
-
-  .slide-leave {
-
   }
 
   .slide-leave-active {

@@ -24,15 +24,18 @@ const mutations = {
 
 const actions = {
   loadEvent: ({commit, dispatch}, id) => {
-    axios.get(`/event/${id}/list/line/en/`)
-      .then(res => {
-        console.log(res);
-        commit('UPDATE_EVENT', res.data.body);
-        dispatch('groupMarkets')
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    return new Promise((resolve, reject) => {
+      axios.get(`/event/${id}/list/line/en/`)
+        .then(res => {
+          commit('UPDATE_EVENT', res.data.body);
+          dispatch('groupMarkets')
+          resolve()
+        })
+        .catch(err => {
+          console.log(err);
+          reject()
+        })
+    })
   },
     groupMarkets: ({commit, state}) => {
     let marketList = state.event.game_oc_list.reduce(function(h, obj) {

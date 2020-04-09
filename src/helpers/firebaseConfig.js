@@ -8,3 +8,11 @@ export const config = {
   appId: '1:1018065679034:web:d1a61f24c6f92fa949c883',
   measurementId: 'G-NZG7058J1C'
 }
+
+import firebase from 'firebase/app'
+import 'firebase/firestore'
+
+// Get a Firestore instance
+export const db = firebase
+  .initializeApp(config)
+  .firestore()

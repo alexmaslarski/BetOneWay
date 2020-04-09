@@ -20,16 +20,18 @@ const mutations = {
 
 const actions = {
   loadTournaments: ({commit}) => {
-    axios.get('/events/1/0/sub/20/line/en')
-      .then(res => {
-        console.log(res.data.body);
-        commit('UPDATE_TOURNAMENTS', res.data.body);
-        console.log(state.tournaments);
-        
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    return new Promise((resolve, reject) => {
+      axios.get('/events/1/0/sub/20/line/en')
+        .then(res => {
+          commit('UPDATE_TOURNAMENTS', res.data.body);
+          resolve()
+          
+        })
+        .catch(err => {
+          console.log(err);
+          reject();
+        })
+    })
   }
 }
 

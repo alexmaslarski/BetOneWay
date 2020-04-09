@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { vuexfireMutations } from 'vuexfire'
 import events from './modules/Events'
 import event from './modules/Event'
 import user from './modules/User'
@@ -9,6 +10,7 @@ export default new Vuex.Store({
 
   },
   mutations: {
+    ...vuexfireMutations,
   },
   actions: {
   },

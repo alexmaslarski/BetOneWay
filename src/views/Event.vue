@@ -1,16 +1,21 @@
 <template>
-  <div class="event">
-      <app-event-heading
-    :team1="getEvent.opp_1_name"
-    :team2="getEvent.opp_2_name"
-    :tournament="getEvent.tournament_name"
-    :date="getEvent.game_start"
-    >
-    </app-event-heading>
-    <app-event-markets
-    :markets="getMarkets"
-    ></app-event-markets>
-  </div>
+  <v-skeleton-loader
+    :loading="loading"
+    type="card, list-item@6"
+  >
+    <div class="event">
+        <app-event-heading
+      :team1="getEvent.opp_1_name"
+      :team2="getEvent.opp_2_name"
+      :tournament="getEvent.tournament_name"
+      :date="getEvent.game_start"
+      >
+      </app-event-heading>
+      <app-event-markets
+      :markets="getMarkets"
+      ></app-event-markets>
+    </div>
+  </v-skeleton-loader>
 </template>
 
 <script>
@@ -25,7 +30,8 @@ export default {
   },
   data() {
     return {
-      id: this.$route.params.id
+      id: this.$route.params.id,
+      loading: true
     }
   },
   watch: {
@@ -41,6 +47,9 @@ export default {
   },
   created() {
     this.$store.dispatch('loadEvent', this.id)
+      .then(() => {
+        this.loading = false;
+      })
   }
 }
 </script>

@@ -13,6 +13,13 @@ export default {
   name: 'Login',
   mounted() {
     var uiConfig = {
+      callbacks: {
+        signInSuccessWithAuthResult(authResult){
+          console.log(authResult);
+          
+
+        }
+      },
       signInFlow: 'popup',
       signInOptions: [
         firebase.auth.GoogleAuthProvider.PROVIDER_ID,
