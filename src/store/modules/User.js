@@ -20,9 +20,7 @@ const mutations = {
   'CLEAR_BET': (state, id) => {
     const index = state.betslip.findIndex(bet => bet.pointer === id);
     index >= 0 ? [...state.betslip.slice(0, index), ...state.betslip.slice(index + 1)] : state.betslip;
-    let removed = state.betslip.splice(index,1);
-    console.log(removed);
-    console.log(index);
+    state.betslip.splice(index,1);
   }
 }
 const getters = {
@@ -31,6 +29,9 @@ const getters = {
   },
   getBetSlip: state => {
     return state.betslip;
+  },
+  getBetSlipCount: state => {
+    return state.betslip.length;
   }
 }
 
@@ -48,7 +49,6 @@ const actions = {
   placeBet: firestoreAction(({ state, dispatch }) => {
     let userID = auth.currentUser.uid;
     let timeStamp = new Date();
-    console.log(state.betslip);
     let bet = {
       selection: state.betslip,
       timeStamp
@@ -56,6 +56,7 @@ const actions = {
     db.collection('users').doc(userID).update({
       betHistory: firebase.firestore.FieldValue.arrayUnion(bet)
     })
+
     .then(() => {
       dispatch('clearBetSlip')
       console.log('Successful');
@@ -70,7 +71,7 @@ const actions = {
   },
   clearBetById: ({commit}, id) => {
     commit('CLEAR_BET', id);
-  },
+  }
 }
 export default {
   state,

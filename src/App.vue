@@ -19,13 +19,22 @@
       <v-toolbar-title>{{ $route.name }}</v-toolbar-title>
 
       <v-spacer></v-spacer>
+      
       <v-btn
-      icon
-      @click="drawer = true"
+        icon
+        @click="drawer = true"
+        >
+        <v-badge
+        :content="getBetSlipCount"
+        :value="getBetSlipCount > 0"
+        color="green"
       >
-        <v-icon v-if="getUser">mdi-menu</v-icon>
-        <v-icon v-else>mdi-login</v-icon>
+          <v-icon v-if="getUser">mdi-menu</v-icon>
+          <v-icon v-else>mdi-login</v-icon>
+        </v-badge>
       </v-btn>
+      
+        
     </v-app-bar>
 
         <!-- Nav drawer -->
@@ -94,7 +103,8 @@ export default {
   },
     computed: {
     ...mapGetters([
-      'getUser'
+      'getUser',
+      'getBetSlipCount'
     ])
   },
   methods: {
