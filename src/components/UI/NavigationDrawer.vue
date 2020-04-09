@@ -1,4 +1,5 @@
 <template>
+<div class="nav-drawer">
   <v-list
   dense
   nav
@@ -16,13 +17,19 @@
       <v-list-item-subtitle>Profile</v-list-item-subtitle>
     </v-list-item-content>
     </v-list-item>
-    <v-divider></v-divider>
   </v-list>
+  <v-divider></v-divider>
+  <app-bet-slip></app-bet-slip>
+</div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
+import BetSlip from '../BetSlip/BetSlipListing'
 export default {
+  components: {
+    'app-bet-slip': BetSlip
+  },
   data() {
     return {
       user: null
