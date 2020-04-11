@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import * as firebase from "firebase";
 import * as firebaseui from 'firebaseui'
 import "firebaseui/dist/firebaseui.css";
@@ -16,8 +17,12 @@ export default {
     var uiConfig = {
       callbacks: {
         signInSuccessWithAuthResult(authResult){
-          console.log(authResult.user);
-          
+          Vue.$toast.open({
+            message: `Hello, ${authResult.user.displayName}!`,
+            position: 'bottom',
+            type: 'success',
+            dismissible: true
+          });
           let docRef = db.collection('users').doc(authResult.user.uid);
           docRef.get().then(function(doc){
             if (doc.exists) {

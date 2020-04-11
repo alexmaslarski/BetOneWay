@@ -75,6 +75,7 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import { mapGetters } from 'vuex';
 import firebase from "firebase";
 import Login from './components/Login.vue'
@@ -87,20 +88,12 @@ export default {
   },
   data () {
     return {
-      drawer: false,
-      transitionName: 'slide-left'
+      drawer: false
     }
-  },
-   beforeRouteUpdate (to, from, next) {
-    const toDepth = to.path.split('/').length
-    const fromDepth = from.path.split('/').length
-    this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
-    next()
   },
   mounted () {
     firebase.auth().onAuthStateChanged(user => {
       this.$store.dispatch('updateUser', user)
-      this.$store.dispatch('bindUserInfo')
     });
   },
     computed: {
@@ -112,6 +105,12 @@ export default {
   methods: {
     logOut() {
       firebase.auth().signOut();
+      Vue.$toast.open({
+        message: 'Logged out',
+        position: 'bottom',
+        type: 'info',
+        dismissible: true
+      });
     },
     goBack() {
       return this.$router.go(-1);

@@ -7,6 +7,7 @@
         <v-card-title>{{ getUser.displayName }}</v-card-title>
         <v-card-subtitle>{{ getUser.email }}</v-card-subtitle>
         <v-divider></v-divider>
+        <template v-if="getBetHistory">
         <v-card-title>
           Bet History
         </v-card-title>
@@ -37,6 +38,7 @@
           </v-expansion-panel>
 
         </v-expansion-panels>
+        </template>
 
       </v-card>
   </v-container>
@@ -44,7 +46,6 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import firebase from 'firebase';
 import BetHistoryItem from '@/components/Profile/BetHistoryItem'
 export default {
   name: 'Profile',
@@ -61,11 +62,6 @@ export default {
       'getUser',
       'getBetHistory'
     ])
-  },
-  methods: {
-    logOut() {
-      firebase.auth().signOut();
-    }
   }
 };
 </script>

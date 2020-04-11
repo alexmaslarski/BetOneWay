@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import { db, auth } from '@/helpers/firebaseConfig'
 import { firestoreAction } from 'vuexfire'
 import firebase from 'firebase/app'
@@ -35,40 +36,74 @@ const getters = {
     return state.betslip.length;
   },
   getBetHistory: state => {
-    return state.userInfo.betHistory;
+    if(state.userInfo.betHistory){
+      return state.userInfo.betHistory;
+    }
   }
 }
 
 const actions = {
-  updateUser: ({commit}, user) => {
+  updateUser: ({commit, dispatch}, user) => {
     commit('UPDATE_USER', user);
+
+    if(user){
+      dispatch('bindUserInfo')
+    }
   },
   updateBetSlip: ({commit, state}, payload) => {
-    if(!state.betslip.find(bet => bet.pointer === payload.pointer)){
-      commit('UPDATE_BETSLIP', payload);
-    }else {
-      console.log("Duplicate");
+    if(auth.currentUser){
+      if(!state.betslip.find(bet => bet.pointer === payload.pointer)){
+        commit('UPDATE_BETSLIP', payload);
+      }else {
+        Vue.$toast.open({
+          message: 'You have already selected this game',
+          position: 'bottom',
+          type: 'error',
+          dismissible: true
+        });
+      }
+    }else{
+      Vue.$toast.open({
+        message: 'You need to log in first',
+        position: 'bottom',
+        type: 'error',
+        dismissible: true
+      });
     }
   },
   placeBet: firestoreAction(({ state, dispatch }) => {
-    let userID = auth.currentUser.uid;
-    let timeStamp = new Date();
-    let bet = {
-      selection: state.betslip,
-      timeStamp
+    if(auth.currentUser){
+      let userID = auth.currentUser.uid;
+      let timeStamp = new Date();
+      let bet = {
+        selection: state.betslip,
+        timeStamp
+      }
+      db.collection('users').doc(userID).update({
+        betHistory: firebase.firestore.FieldValue.arrayUnion(bet)
+      })
+  
+      .then(() => {
+        dispatch('clearBetSlip')
+        Vue.$toast.open({
+          message: 'Bet Placed',
+          position: 'bottom',
+          type: 'success',
+          dismissible: true
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        
+      });
+    }else{
+      Vue.$toast.open({
+        message: 'You need to log in first',
+        position: 'bottom',
+        type: 'error',
+        dismissible: true
+      });
     }
-    db.collection('users').doc(userID).update({
-      betHistory: firebase.firestore.FieldValue.arrayUnion(bet)
-    })
-
-    .then(() => {
-      dispatch('clearBetSlip')
-      console.log('Successful');
-    })
-    .catch((err) => {
-      console.log(err);
-      
-    });
   }),
   clearBetSlip: ({commit}) => {
     commit('CLEAR_BETSLIP');
@@ -79,6 +114,7 @@ const actions = {
   bindUserInfo: firestoreAction(({ bindFirestoreRef }) => {
     bindFirestoreRef('userInfo', db.collection('users').doc(auth.currentUser.uid))
   }),
+  
 }
 export default {
   state,

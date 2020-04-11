@@ -58,8 +58,6 @@ export default {
       pointer,
       eventName
     }
-    console.log(eventName);
-    
       this.$store.dispatch('updateBetSlip', betSelection)
     }
   }
