@@ -28,7 +28,6 @@
         :content="getBetSlipCount"
         :value="getBetSlipCount > 0"
         color="orange"
-        inline
       >
           <v-icon v-if="getUser">mdi-menu</v-icon>
           <v-icon v-else>mdi-login</v-icon>

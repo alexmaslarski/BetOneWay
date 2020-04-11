@@ -55,12 +55,7 @@ const actions = {
       if(!state.betslip.find(bet => bet.pointer === payload.pointer)){
         commit('UPDATE_BETSLIP', payload);
       }else {
-        Vue.$toast.open({
-          message: 'You have already selected this game',
-          position: 'bottom',
-          type: 'error',
-          dismissible: true
-        });
+        commit('CLEAR_BET', payload.pointer);
       }
     }else{
       Vue.$toast.open({
