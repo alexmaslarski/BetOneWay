@@ -4,7 +4,7 @@
     <!-- Top bar -->
     <v-app-bar
       app
-      color="primary"
+      color="success"
       elevate-on-scroll
       dark
       clipped-right
@@ -27,7 +27,8 @@
         <v-badge
         :content="getBetSlipCount"
         :value="getBetSlipCount > 0"
-        color="green"
+        color="orange"
+        inline
       >
           <v-icon v-if="getUser">mdi-menu</v-icon>
           <v-icon v-else>mdi-login</v-icon>
@@ -99,6 +100,7 @@ export default {
   mounted () {
     firebase.auth().onAuthStateChanged(user => {
       this.$store.dispatch('updateUser', user)
+      this.$store.dispatch('bindUserInfo')
     });
   },
     computed: {

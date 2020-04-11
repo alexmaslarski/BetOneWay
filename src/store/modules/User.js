@@ -4,7 +4,8 @@ import firebase from 'firebase/app'
 import 'firebase/firestore'
 const state = {
   user: null,
-  betslip: []
+  betslip: [],
+  userInfo: []
 }
 
 const mutations = {
@@ -32,6 +33,9 @@ const getters = {
   },
   getBetSlipCount: state => {
     return state.betslip.length;
+  },
+  getBetHistory: state => {
+    return state.userInfo.betHistory;
   }
 }
 
@@ -71,7 +75,10 @@ const actions = {
   },
   clearBetById: ({commit}, id) => {
     commit('CLEAR_BET', id);
-  }
+  },
+  bindUserInfo: firestoreAction(({ bindFirestoreRef }) => {
+    bindFirestoreRef('userInfo', db.collection('users').doc(auth.currentUser.uid))
+  }),
 }
 export default {
   state,

@@ -3,13 +3,13 @@ import Vuex from 'vuex'
 import events from './modules/Events'
 import event from './modules/Event'
 import user from './modules/User'
+import { vuexfireMutations } from 'vuexfire'
 Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
 
   },
-  mutations: {
-  },
+  mutations: vuexfireMutations,
   actions: {
   },
   modules: {
