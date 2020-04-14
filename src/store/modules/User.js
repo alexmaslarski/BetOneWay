@@ -3,6 +3,7 @@ import { db, auth } from '@/helpers/firebaseConfig'
 import { firestoreAction } from 'vuexfire'
 import firebase from 'firebase/app'
 import 'firebase/firestore'
+import router from '@/router/index'
 const state = {
   user: null,
   betslip: [],
@@ -110,6 +111,7 @@ const actions = {
         commit('CLEAR_BET', payload.pointer);
       }
     }else{
+      router.push('/signin/login')
       Vue.$toast.open({
         message: 'You need to log in first',
         position: 'bottom',
