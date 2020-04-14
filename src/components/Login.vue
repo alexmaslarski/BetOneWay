@@ -1,5 +1,8 @@
 <template>
   <v-container>
+    <v-card-title>
+      Log In
+    </v-card-title>
     <section id="firebaseui-auth-container"></section>
     <v-form @submit.prevent="onSignin">
       <v-text-field
@@ -12,11 +15,13 @@
       <v-text-field
         name="password"
         label="Password"
+        :rules="passwordRules"
         id="password"
         v-model="password"
         type="password"
         required></v-text-field>
-      <v-btn type="submit">Sign in</v-btn>
+      <v-btn color="success" type="submit">Sign in</v-btn>
+      <v-btn class="ml-2" to="/signin/register">or Register</v-btn>
     </v-form>
   </v-container>
 </template>
@@ -34,7 +39,11 @@ export default {
   data () {
     return {
       email: '',
-      password: ''
+      password: '',
+      passwordRules: [
+        v => !!v || 'Password is required',
+        v => v.length >= 6 || 'Password must be at least 6 characters',
+      ],
     }
   },
   computed: {

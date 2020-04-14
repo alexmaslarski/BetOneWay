@@ -1,39 +1,34 @@
 <template>
   <v-container>
-    <v-layout row>
-      <v-flex xs12 sm6 offset-sm3>
-        <v-card>
-          <v-card-text>
-            <v-container>
-              <form @submit.prevent="onSignup">
-                <v-text-field
-                  name="email"
-                  label="Mail"
-                  id="email"
-                  v-model="email"
-                  type="email"
-                  required></v-text-field>
-                <v-text-field
-                  name="password"
-                  label="Password"
-                  id="password"
-                  v-model="password"
-                  type="password"
-                  required></v-text-field>
-                <v-text-field
-                  name="confirmPassword"
-                  label="Confirm Password"
-                  id="confirmPassword"
-                  v-model="confirmPassword"
-                  type="password"
-                  :rules="[comparePasswords]"></v-text-field>
-                <v-btn type="submit">Sign up</v-btn>
-              </form>
-            </v-container>
-          </v-card-text>
-        </v-card>
-      </v-flex>
-    </v-layout>
+    <v-card-title>
+      Sign Up
+    </v-card-title>
+      <v-form @submit.prevent="onSignup">
+        <v-text-field
+          name="email"
+          label="Mail"
+          id="email"
+          v-model="email"
+          type="email"
+          required></v-text-field>
+        <v-text-field
+          name="password"
+          :rules="passwordRules"
+          label="Password"
+          id="password"
+          v-model="password"
+          type="password"
+          required></v-text-field>
+        <v-text-field
+          name="confirmPassword"
+          label="Confirm Password"
+          id="confirmPassword"
+          v-model="confirmPassword"
+          type="password"
+          :rules="[comparePasswords]"></v-text-field>
+        <v-btn color="success" type="submit">Sign up</v-btn>
+        <v-btn class="ml-2" to="/signin/login">or Log In</v-btn>
+      </v-form>
   </v-container>
 </template>
 
@@ -43,7 +38,11 @@
       return {
         email: '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        passwordRules: [
+        v => !!v || 'Password is required',
+        v => v.length >= 6 || 'Password must be at least 6 characters',
+      ],
       }
     },
     computed: {
