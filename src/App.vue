@@ -72,6 +72,10 @@
       <span>Home</span>
       <v-icon>mdi-home</v-icon>
     </v-btn>
+    <v-btn to="/profile" value="Profile">
+      <span>Profile</span>
+      <v-icon>mdi-account</v-icon>
+    </v-btn>
   </v-bottom-navigation>
   
   </v-app>

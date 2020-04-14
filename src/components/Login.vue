@@ -1,8 +1,5 @@
 <template>
   <v-container>
-    <v-card-title>
-      Log In
-    </v-card-title>
     <section id="firebaseui-auth-container"></section>
     <v-form @submit.prevent="onSignin">
       <v-text-field

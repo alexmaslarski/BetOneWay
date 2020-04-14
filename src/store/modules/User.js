@@ -59,6 +59,12 @@ const actions = {
       .catch(
         error => {
           console.log(error)
+          Vue.$toast.open({
+            message: 'Unsuccessful',
+            position: 'bottom',
+            type: 'error',
+            dismissible: true
+          });
         }
       )
   },
@@ -80,6 +86,12 @@ const actions = {
       .catch(
         error => {
           console.log(error)
+          Vue.$toast.open({
+            message: 'Unsuccessful',
+            position: 'bottom',
+            type: 'error',
+            dismissible: true
+          });
         }
       )
   },

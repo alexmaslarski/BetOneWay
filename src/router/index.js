@@ -25,7 +25,7 @@ Vue.use(VueRouter)
       if(auth.currentUser){
         next()
       }else {
-        next({name: Login})
+        next({path: '/signin/login'})
       }
     }
   },
@@ -36,11 +36,13 @@ Vue.use(VueRouter)
     children: [
       {
         path: 'login',
-        component: Login
+        component: Login,
+        name: 'Login'
       },
       {
         path: 'register',
-        component: Register
+        component: Register,
+        name: 'Register'
       }
     ]
   },

@@ -1,8 +1,5 @@
 <template>
   <v-container>
-    <v-card-title>
-      Sign Up
-    </v-card-title>
       <v-form @submit.prevent="onSignup">
         <v-text-field
           name="email"
