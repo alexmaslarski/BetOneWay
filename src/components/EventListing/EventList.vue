@@ -58,8 +58,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'getTournaments',
-      'getTournamentEvents'
+      'getTournaments'
     ])
   },
   methods: {

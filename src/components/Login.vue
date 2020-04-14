@@ -1,11 +1,29 @@
 <template>
   <v-container>
     <section id="firebaseui-auth-container"></section>
+    <v-form @submit.prevent="onSignin">
+      <v-text-field
+        name="email"
+        label="Mail"
+        id="email"
+        v-model="email"
+        type="email"
+        required></v-text-field>
+      <v-text-field
+        name="password"
+        label="Password"
+        id="password"
+        v-model="password"
+        type="password"
+        required></v-text-field>
+      <v-btn type="submit">Sign in</v-btn>
+    </v-form>
   </v-container>
 </template>
 
 <script>
 import Vue from 'vue';
+import { mapGetters } from 'vuex';
 import * as firebase from "firebase";
 import * as firebaseui from 'firebaseui'
 import "firebaseui/dist/firebaseui.css";
@@ -13,6 +31,22 @@ import { db, auth } from '@/helpers/firebaseConfig'
 
 export default {
   name: 'Login',
+  data () {
+    return {
+      email: '',
+      password: ''
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'getUser'
+    ])
+  },
+  methods: {
+    onSignin () {
+      this.$store.dispatch('signUserIn', {email: this.email, password: this.password})
+    }
+  },
   mounted() {
     var uiConfig = {
       callbacks: {

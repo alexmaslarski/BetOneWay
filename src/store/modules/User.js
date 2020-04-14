@@ -43,6 +43,38 @@ const getters = {
 }
 
 const actions = {
+  signUserUp ({commit}, payload) {
+    firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
+      .then(
+        user => {
+          const newUser = {
+            id: user.uid,
+          }
+          commit('UPDATE_USER', newUser)
+        }
+      )
+      .catch(
+        error => {
+          console.log(error)
+        }
+      )
+  },
+  signUserIn ({commit}, payload) {
+    firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
+      .then(
+        user => {
+          const newUser = {
+            id: user.uid
+          }
+          commit('UPDATE_USER', newUser)
+        }
+      )
+      .catch(
+        error => {
+          console.log(error)
+        }
+      )
+  },
   updateUser: ({commit, dispatch}, user) => {
     commit('UPDATE_USER', user);
 

@@ -9,6 +9,7 @@
       dark
       clipped-right
     >
+
       <v-btn
       v-if="$route.path!='/'"
       icon
@@ -16,6 +17,7 @@
       >
         <v-icon>mdi-chevron-left</v-icon>
       </v-btn>
+
       <v-toolbar-title>{{ $route.name }}</v-toolbar-title>
 
       <v-spacer></v-spacer>
@@ -32,6 +34,7 @@
           <v-icon v-if="getUser">mdi-menu</v-icon>
           <v-icon v-else>mdi-login</v-icon>
         </v-badge>
+
       </v-btn>
       
         
@@ -70,6 +73,7 @@
       <v-icon>mdi-home</v-icon>
     </v-btn>
   </v-bottom-navigation>
+  
   </v-app>
 </template>
 
