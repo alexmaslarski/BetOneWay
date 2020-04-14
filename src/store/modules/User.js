@@ -43,14 +43,17 @@ const getters = {
 }
 
 const actions = {
-  signUserUp ({commit}, payload) {
+  signUserUp ({dispatch}, payload) {
     firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
       .then(
-        user => {
-          const newUser = {
-            id: user.uid,
-          }
-          commit('UPDATE_USER', newUser)
+        authResult => {
+          let docRef = db.collection('users').doc(authResult.user.uid);
+          docRef.get().then(function(){
+              db.collection('users').doc(authResult.user.uid).update({
+                lastSignIn: authResult.user.metadata.lastSignInTime
+              })
+          })
+          dispatch('updateUser', authResult)
         }
       )
       .catch(
@@ -59,14 +62,19 @@ const actions = {
         }
       )
   },
-  signUserIn ({commit}, payload) {
+  signUserIn ({dispatch}, payload) {
     firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
       .then(
-        user => {
-          const newUser = {
-            id: user.uid
-          }
-          commit('UPDATE_USER', newUser)
+        authResult => {
+          db.collection('users').doc(authResult.user.uid).set({
+            name: authResult.user.displayName,
+            id: authResult.user.uid,
+            photoUrl: authResult.user.photoURL,
+            accountCreated: authResult.user.metadata.creationTime,
+            lastSignIn: authResult.user.metadata.lastSignInTime,
+          })
+
+          dispatch('updateUser', authResult)
         }
       )
       .catch(
