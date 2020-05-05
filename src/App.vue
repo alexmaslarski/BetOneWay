@@ -5,55 +5,22 @@
     <v-app-bar
       app
       elevate-on-scroll
-      clipped-right
+      clipped-left
     >
-
-      <v-btn
-      v-if="$route.path!='/'"
-      icon
-      @click="goBack"
-      >
-        <v-icon>mdi-chevron-left</v-icon>
+      <v-btn icon to="/profile">
+        <v-avatar v-if="getUser" size="25">
+          <img :src="getUser.photoURL" alt="">
+        </v-avatar>
+        <v-icon v-else>mdi-login</v-icon>
       </v-btn>
 
-      <v-toolbar-title>{{ $route.name }}</v-toolbar-title>
 
-      <v-spacer></v-spacer>
-      
-      <v-btn
-        icon
-        @click="drawer = true"
-        >
-        <v-badge
-        :content="getBetSlipCount"
-        :value="getBetSlipCount > 0"
-        color="orange"
-      >
-          <v-icon v-if="getUser">mdi-menu</v-icon>
-          <v-icon v-else>mdi-login</v-icon>
-        </v-badge>
+      <v-img height="22px" contain :src="require('@/assets/logo.svg')"></v-img>
 
+      <v-btn icon>
+          <v-icon>mdi-bell-outline</v-icon>
       </v-btn>
-      
-        
     </v-app-bar>
-
-        <!-- Nav drawer -->
-    <v-navigation-drawer
-    app
-    v-model="drawer"
-    clipped
-    right
-    >
-    <app-nav-drawer-content v-if="getUser"></app-nav-drawer-content>
-      
-    <app-login v-else ></app-login>
-      <template v-if="getUser" v-slot:append>
-        <div class="pa-2">
-          <v-btn @click='logOut' block>Logout</v-btn>
-        </div>
-      </template>
-    </v-navigation-drawer>
 
     <!-- Content -->
     <v-content>
@@ -63,17 +30,26 @@
     </v-content>
 
     <!-- Bottom nav -->
-    <v-bottom-navigation
-    app
-    >
-    <v-btn to="/" value="Home">
-      <span>Home</span>
-      <v-icon>mdi-home</v-icon>
-    </v-btn>
-    <v-btn to="/profile" value="Profile">
-      <span>Profile</span>
-      <v-icon>mdi-account</v-icon>
-    </v-btn>
+    <v-bottom-navigation app shift active-class="navigation-active" class="px-2">
+      <v-btn to="/" value="Feed">
+      <span>Feed</span>
+        <v-icon>mdi-newspaper-variant-multiple-outline</v-icon>
+      </v-btn>
+      <v-btn to="/events" value="Events">
+      <span>Events</span>
+        <v-icon>mdi-soccer</v-icon>
+      </v-btn>
+      <v-btn>
+        <v-icon>mdi-plus-box-outline</v-icon>
+      </v-btn>
+      <v-btn to="/tipsters" value="Tipsters">
+        <span>Tipsters</span>
+        <v-icon>mdi-account-check-outline</v-icon>
+      </v-btn>
+      <v-btn to="/explore" value="Explore">
+        <span>Explore</span>
+        <v-icon>mdi-earth</v-icon>
+      </v-btn>
   </v-bottom-navigation>
   
   </v-app>
@@ -83,19 +59,8 @@
 import Vue from 'vue';
 import { mapGetters } from 'vuex';
 import firebase from "firebase";
-import Login from './components/Login.vue'
-import NavDrawer from './components/UI/NavigationDrawer.vue'
 export default {
   name: 'App',
-  components: {
-    'app-login': Login,
-    'app-nav-drawer-content': NavDrawer
-  },
-  data () {
-    return {
-      drawer: false
-    }
-  },
   mounted () {
     firebase.auth().onAuthStateChanged(user => {
       this.$store.dispatch('updateUser', user)
@@ -123,7 +88,7 @@ export default {
   }
 };
 </script>
-<style>
+<style lang="scss">
 .slide-enter {
       opacity: 0;
   }
@@ -142,6 +107,13 @@ export default {
 
   .slide-move {
       transition: transform 0.5s;
+  }
+  
+  .navigation-active {
+    span {
+      color: #3CD350;
+    }
+    border-top: 2px solid #3CD350;
   }
 
   @keyframes slide-in {

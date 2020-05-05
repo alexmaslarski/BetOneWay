@@ -3,6 +3,7 @@
     <v-card
       v-if="getUser"
       >
+      <v-btn @click='logOut' block>Logout</v-btn>
         <v-img :src="getUser.photoURL" alt=""></v-img>
         <v-card-title>{{ getUser.displayName }}</v-card-title>
         <v-card-subtitle>{{ getUser.email }}</v-card-subtitle>
@@ -45,6 +46,8 @@
 </template>
 
 <script>
+import Vue from 'vue';
+import firebase from "firebase";
 import { mapGetters } from 'vuex';
 import BetHistoryItem from '@/components/Profile/BetHistoryItem'
 export default {
@@ -62,6 +65,17 @@ export default {
       'getUser',
       'getBetHistory'
     ])
+  },
+  methods: {
+    logOut() {
+      firebase.auth().signOut();
+      Vue.$toast.open({
+        message: 'Logged out',
+        position: 'bottom',
+        type: 'info',
+        dismissible: true
+      });
+    }
   }
 };
 </script>

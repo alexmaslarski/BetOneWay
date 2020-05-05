@@ -2,7 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import { auth } from '@/helpers/firebaseConfig'
 // Pages
-import Home from '@/views/Home.vue'
+import Feed from '@/views/Feed.vue'
+import Activity from '@/views/Activity.vue'
 import Event from '@/views/Event.vue'
 import Profile from '@/views/Profile.vue'
 import SignIn from '@/views/SignIn.vue'
@@ -14,8 +15,8 @@ Vue.use(VueRouter)
   const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    name: 'Feed',
+    component: Feed
   },
   {
     path: '/profile',
@@ -50,6 +51,11 @@ Vue.use(VueRouter)
     path: '/event/:id',
     name: 'Event',
     component: Event
+  },
+  {
+    path: '/activity',
+    name: 'Activity',
+    component: Activity
   }
 ]
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="feed">
     <app-event-list></app-event-list>
   </div>
 </template>
@@ -8,7 +8,7 @@
 // @ is an alias to /src
 import EventList from '@/components/EventListing/EventList.vue';
 export default {
-  name: 'Home',
+  name: 'Feed',
   components: {
     'app-event-list': EventList
   }
