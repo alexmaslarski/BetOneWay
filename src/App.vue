@@ -1,12 +1,10 @@
 <template>
-  <v-app>
+  <v-app dark>
 
     <!-- Top bar -->
     <v-app-bar
       app
-      color="success"
       elevate-on-scroll
-      dark
       clipped-right
     >
 
