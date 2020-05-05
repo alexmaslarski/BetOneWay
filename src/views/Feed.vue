@@ -1,16 +1,22 @@
 <template>
   <div class="feed">
-    <app-event-list></app-event-list>
+    <v-container>
+      <div class="titles d-flex">
+        <h1 class="display-1 font-weight-bold">{{ $route.name }}</h1>
+        <p class="display-1 text--secondary pl-3">Following</p>
+      </div>
+      <app-post-listing></app-post-listing>
+    </v-container>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import EventList from '@/components/EventListing/EventList.vue';
+import PostListing from '@/components/Posts/PostListing.vue';
 export default {
   name: 'Feed',
   components: {
-    'app-event-list': EventList
+    'app-post-listing': PostListing
   }
 }
 </script>

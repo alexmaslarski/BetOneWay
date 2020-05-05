@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuetify from 'vuetify/lib';
-import colors from 'vuetify/lib/util/colors'
+// import colors from 'vuetify/lib/util/colors'
 
 Vue.use(Vuetify);
 
@@ -9,9 +9,16 @@ export default new Vuetify({
     dark: false,
     themes: {
       dark: {
-        primary: colors.green.darken4, // #E53935
-        secondary: colors.red.lighten4, // #FFCDD2
-        accent: colors.indigo.base, // #3F51B5
+        primary: {
+          base: '#0d8deb', //blue
+          darken1: '#2A46A6', //purple
+        },
+        secondary: {
+          base: '#666666', //gray
+          lighten1: '#f6f7f9'
+        },
+        accent: '#feac0e', // yellow,
+        error: '#d20d25', //red
       },
     },
   },

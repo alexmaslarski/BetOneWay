@@ -4,8 +4,6 @@
   type="card-heading, list-item@3"
   >
     <div class="event-list">
-      <v-container>
-      
           <v-card
           v-for="tournament in getTournaments"
           :key="tournament.tournament_id"
@@ -38,7 +36,6 @@
               </template>
             </v-simple-table>
           </v-card>
-      </v-container>
     </div>
   </v-skeleton-loader>
 </template>
