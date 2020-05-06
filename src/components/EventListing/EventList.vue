@@ -1,43 +1,23 @@
 <template>
- <v-skeleton-loader
-  :loading="loading"
-  type="card-heading, list-item@3"
-  >
+  <v-container>
+  <v-skeleton-loader :loading="loading" type="card-heading, list-item@3">
     <div class="event-list">
-          <v-card
-          v-for="tournament in getAllTournaments"
-          :key="tournament.tournament_id"
-          max-width="100%"
-          class="mx-auto"
-          color="success"
-          >
-          <v-card-title class="white--text">{{ tournament.tournament_name }}</v-card-title>
-
-            <v-simple-table
-            class="event-group"
-            :fixed-header="true"
-            >
-              <template v-slot:default>
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Event</th>
-                    <th>Odds</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <app-event-item
-                  v-for="event in tournament.events_list"
-                  :key="event.game_id"
-                  :event="event"
-                  >
-                  </app-event-item>
-                </tbody>
-              </template>
-            </v-simple-table>
-          </v-card>
+      <v-card v-for="tournament in getAllTournaments" :key="tournament.tournament_id" class="mx-auto mb-3" color="white">
+        <v-card-title  class="py-3 black--text subtitle-1 font-weight-medium">{{ tournament.tournament_name }}</v-card-title>
+        <v-divider></v-divider>
+        <app-event-item v-for="event in tournament.events_list" :key="event.game_id" :event="event"></app-event-item>
+        <!-- <v-simple-table class="event-group">
+          <template v-slot:default>
+            <tbody>
+              <app-event-item v-for="event in tournament.events_list" :key="event.game_id" :event="event">
+              </app-event-item>
+            </tbody>
+          </template>
+        </v-simple-table> -->
+      </v-card>
     </div>
   </v-skeleton-loader>
+  </v-container>
 </template>
 
 <script>

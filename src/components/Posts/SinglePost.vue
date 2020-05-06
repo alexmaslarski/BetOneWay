@@ -22,7 +22,7 @@
         <v-list-item-action>
           <v-chip small>{{tip.selectionOdd}}</v-chip>
           <v-list-item-action-text class="black--text">{{tip.eventDate.toDate() | moment("HH:MM")}}</v-list-item-action-text>
-          <v-list-item-action-text>{{tip.eventDate.toDate() | moment("HH:MM")}}</v-list-item-action-text>
+          <v-list-item-action-text>{{tip.eventDate.toDate() | moment("D MMM YYYY")}}</v-list-item-action-text>
         </v-list-item-action>
       </v-list-item>
     </template>
