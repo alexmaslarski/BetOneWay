@@ -18,6 +18,15 @@ const getters = {
   getLiveTournaments: state => {
     return state.liveTournaments
   },
+  getLiveEventsList: state => {
+    let eventList = [];
+    state.liveTournaments.forEach(tournament => {
+      tournament.events_list.forEach( event => {
+        eventList.push(event);
+      })
+    });
+    return eventList;
+  },
   // Get events in tournament live
   getLiveTournamentEvents: state => id => {
     return state.liveTournaments.find(tournament => tournament.tournament_id === id);
