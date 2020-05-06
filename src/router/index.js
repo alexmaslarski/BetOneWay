@@ -4,7 +4,9 @@ import { auth } from '@/helpers/firebaseConfig'
 // Pages
 import Feed from '@/views/Feed.vue'
 import Activity from '@/views/Activity.vue'
-import Event from '@/views/Event.vue'
+import Events from '@/views/Events/Events.vue'
+import AllEvents from '@/views/Events/AllEvents.vue'
+import Event from '@/views/Events/Event.vue'
 import Profile from '@/views/Profile.vue'
 import SignIn from '@/views/SignIn.vue'
 import Login from '@/components/Login.vue'
@@ -48,9 +50,22 @@ Vue.use(VueRouter)
     ]
   },
   {
-    path: '/event/:id',
-    name: 'Event',
-    component: Event
+    path: '/events',
+    name: 'Events',
+    component: Events,
+    children: [
+      {
+        path: 'all-events',
+        component: AllEvents,
+        name: 'AllEvents',
+        alias: '/events'
+      },
+      {
+        path: '/event/:id',
+        component: Event,
+        name: 'Event'
+      }
+    ]
   },
   {
     path: '/activity',

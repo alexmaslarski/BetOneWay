@@ -5,7 +5,7 @@
   >
     <div class="event-list">
           <v-card
-          v-for="tournament in getTournaments"
+          v-for="tournament in getAllTournaments"
           :key="tournament.tournament_id"
           max-width="100%"
           class="mx-auto"
@@ -55,16 +55,20 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'getTournaments'
+      'getAllTournaments',
+      'getLiveTournaments',
+      'getLineTournaments'
     ])
   },
   methods: {
     ...mapActions([
-      'loadTournaments'
+      'loadAllEvents',
+      'loadLiveEvents',
+      'loadLineEvents'
     ])
   },
   created() {
-    this.$store.dispatch('loadTournaments')
+    this.$store.dispatch('loadAllEvents')
     .then(() => {
         this.loading = false;
     })

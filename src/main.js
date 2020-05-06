@@ -7,6 +7,8 @@ import axios from 'axios';
 import VueToast from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-default.css';
 import Vuelidate from 'vuelidate'
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+import 'swiper/css/swiper.css'
 
 
 axios.defaults.baseURL = 'https://sports-odds-betapi.p.rapidapi.com/v1';
@@ -19,6 +21,7 @@ Vue.use(Vuelidate)
 Vue.use(VueToast);
 Vue.config.productionTip = false
 Vue.use(require('vue-moment'));
+Vue.use(VueAwesomeSwiper)
 new Vue({
   router,
   store,
