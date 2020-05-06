@@ -7,13 +7,7 @@ const state = {
 
 const getters = {
   getPosts: state => {
-    return state.tournaments
-  }
-}
-
-const mutations = {
-  'UPDATE_POSTS': (state, payload) => {
-    state.tournaments = payload;
+    return state.posts
   }
 }
 
@@ -26,6 +20,5 @@ const actions = {
 export default {
   state,
   getters,
-  mutations,
   actions
 };

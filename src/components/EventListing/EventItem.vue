@@ -21,10 +21,6 @@ export default {
   props: {
     event: Object
   },
-  data() {
-    return {
-    }
-  },
   computed: {
     eachWayOdds () {
       return this.event.game_oc_list.filter(function(obj) {
