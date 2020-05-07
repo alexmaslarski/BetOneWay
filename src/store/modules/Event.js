@@ -14,8 +14,9 @@ const getters = {
 }
 
 const mutations = {
-  'UPDATE_EVENT': (state, payload) => {
-    state.event = payload;
+  'UPDATE_EVENT': (state, event) => {
+    console.log(event);
+    state.event = event;
   },
   'GROUP_MARKETS': (state, payload) => {
     state.markets = payload;
@@ -23,13 +24,40 @@ const mutations = {
 }
 
 const actions = {
-  loadEvent: ({commit, dispatch}, id) => {
+  async loadEvent ({commit, dispatch}, id) {
+    let response;
+    await dispatch('loadEventLine', id).then((res) => {
+      response = res;
+    })
+    if(response.data.body.game_id) {
+      response.data.body.in_play = false;
+      commit('UPDATE_EVENT', response.data.body);
+      dispatch('groupMarkets')
+      return true
+    }else {
+      return await dispatch('loadEventLive', id)
+    }
+  },
+  loadEventLine: (context, id) => {
     return new Promise((resolve, reject) => {
       axios.get(`/event/${id}/list/line/en/`)
         .then(res => {
-          commit('UPDATE_EVENT', res.data.body);
+          resolve(res)
+        })
+        .catch(err => {
+          console.log(err);
+          reject()
+        })
+    })
+  },
+  loadEventLive: ({commit, dispatch}, id) => {
+    return new Promise((resolve, reject) => {
+      axios.get(`/event/${id}/list/live/en/`)
+        .then((res) => {
+          res.data.body.in_play = true;
+          commit('UPDATE_EVENT', res.data.body, 'live');
           dispatch('groupMarkets')
-          resolve()
+          resolve(res)
         })
         .catch(err => {
           console.log(err);

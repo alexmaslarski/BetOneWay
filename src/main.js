@@ -9,7 +9,7 @@ import 'vue-toast-notification/dist/theme-default.css';
 import Vuelidate from 'vuelidate'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import 'swiper/css/swiper.css'
-
+import BackBtn from '@/components/UI/backButton.vue';
 
 axios.defaults.baseURL = 'https://sports-odds-betapi.p.rapidapi.com/v1';
 axios.defaults.headers.get['x-rapidapi-host'] = 'sports-odds-betapi.p.rapidapi.com';
@@ -18,6 +18,9 @@ axios.defaults.headers.get['package'] = '4a788ec11cd42226e2fdcbd62253379c';
 
 // axios.defaults.baseURL = 'https://odds.incub.space/v1';
 // axios.defaults.headers.get['package'] = 'test_2day_cd42226e2fdcbd62253379c';
+
+
+Vue.component('app-back', BackBtn);
 
 
 Vue.use(Vuelidate)

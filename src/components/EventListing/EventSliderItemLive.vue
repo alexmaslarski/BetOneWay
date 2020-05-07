@@ -1,5 +1,6 @@
 <template>
   <swiper-slide>
+    <router-link :to="{ name: 'Event', params: { id: event.game_id }}" tag="div">
     <v-card>
       <v-list-item>
         <v-list-item-content>
@@ -25,23 +26,18 @@
     <v-list-item class="pb-3 pt-1">
         <v-list-item-content class="py-0">
           <v-row v-if="eachWayOdds.length > 0" class="mx-0" justify="space-between">
-            <div class="text-center">
-              <v-list-item-subtitle class="mb-1 caption text--secondary">1</v-list-item-subtitle>
-              <v-chip small>{{ eachWayOdds[0].oc_rate }}</v-chip>
-            </div>
-            <div class="text-center">
-              <p class="mb-1 caption text--secondary">X</p>
-              <v-chip small>{{eachWayOdds[1].oc_rate}}</v-chip>
-            </div>
-            <div class="text-center">
-              <p class="mb-1 caption text--secondary">2</p>
-              <v-chip small>{{eachWayOdds[2].oc_rate}}</v-chip>
+            <div v-for="(odd, index) in eachWayOdds" :key="odd.oc_pointer" class="text-center">
+              <v-list-item-subtitle v-if="index === 0" class="mb-1 caption text--secondary">1</v-list-item-subtitle>
+              <v-list-item-subtitle v-if="index === 1" class="mb-1 caption text--secondary">X</v-list-item-subtitle>
+              <v-list-item-subtitle v-if="index === 2" class="mb-1 caption text--secondary">2</v-list-item-subtitle>
+              <v-chip small>{{ odd.oc_rate }}</v-chip>
             </div>
           </v-row>
             <p v-else>No odds information</p>
         </v-list-item-content>
       </v-list-item>
     </v-card>
+    </router-link>
   </swiper-slide>
 </template>
 

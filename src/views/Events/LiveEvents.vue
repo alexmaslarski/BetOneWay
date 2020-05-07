@@ -11,12 +11,10 @@
 import { mapGetters } from 'vuex';
 import { mapActions } from 'vuex';
 import EventList from '@/components/EventListing/EventList.vue';
-import BackBtn from '@/components/UI/backButton.vue';
 export default {
   name: 'LiveEvents',
   components: {
-    'app-event-list': EventList,
-    'app-back': BackBtn
+    'app-event-list': EventList
   },
   data() {
     return {
