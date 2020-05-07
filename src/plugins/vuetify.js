@@ -8,7 +8,7 @@ export default new Vuetify({
   theme: {
     dark: false,
     themes: {
-      dark: {
+      light: {
         primary: {
           base: '#0d8deb', //blue
           darken1: '#2A46A6', //purple

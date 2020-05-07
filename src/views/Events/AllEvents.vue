@@ -1,8 +1,22 @@
 <template>
   <v-skeleton-loader :loading="loading" type="card-heading, list-item@3">
   <v-container>
-    <app-event-slider :liveEventsList = getLiveEventsList title = "Live Games"></app-event-slider>
-    <app-event-list :allTournaments = getAllTournaments></app-event-list>
+    <app-event-slider
+    :liveEventsList = getLiveEventsList
+    title = "Live Games"
+    type="live"
+    link="LiveEvents"
+    class="mb-3">
+    </app-event-slider>
+
+    <app-event-slider
+    :liveEventsList = getLiveEventsList
+    title = "Hot Games"
+    type="regular"
+    class="mb-3">
+    </app-event-slider>
+
+    <app-event-list :Tournaments = getAllTournaments title="All Games"></app-event-list>
   </v-container>
   </v-skeleton-loader>
 </template>

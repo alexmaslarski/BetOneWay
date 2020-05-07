@@ -6,6 +6,7 @@ import Feed from '@/views/Feed.vue'
 import Activity from '@/views/Activity.vue'
 import Events from '@/views/Events/Events.vue'
 import AllEvents from '@/views/Events/AllEvents.vue'
+import LiveEvents from '@/views/Events/LiveEvents.vue'
 import Event from '@/views/Events/Event.vue'
 import Profile from '@/views/Profile.vue'
 import SignIn from '@/views/SignIn.vue'
@@ -59,6 +60,11 @@ Vue.use(VueRouter)
         component: AllEvents,
         name: 'AllEvents',
         alias: '/events'
+      },
+      {
+        path: 'live-events',
+        component: LiveEvents,
+        name: 'LiveEvents'
       },
       {
         path: '/event/:id',

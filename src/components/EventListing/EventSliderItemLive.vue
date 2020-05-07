@@ -4,23 +4,22 @@
       <v-list-item>
         <v-list-item-content>
         <div>
-          <p class="caption text--secondary mb-1">Active Tips</p>
-          <v-chip small color="accent" class="white--text font-weight-medium">251</v-chip>
+          <v-chip small color="error" class="white--text font-weight-medium">{{event.timer | moment("m")}}'</v-chip>
         </div>
 
         </v-list-item-content>
         <v-list-item-action>
-          <v-list-item-action-text class="black--text">{{event.game_start | moment("HH:MM")}}</v-list-item-action-text>
-          <v-list-item-action-text>{{event.game_start | moment("D MMM YYYY")}}</v-list-item-action-text>
+          <v-list-item-action-text class="black--text">{{homeScore}} : {{awayScore}}</v-list-item-action-text>
+          <!-- <v-list-item-action-text class="black--text">{{awayScore}}</v-list-item-action-text> -->
         </v-list-item-action>
       </v-list-item>
     <v-divider></v-divider>
     <v-list-item three-line>
       <v-list-item-content>
-          <p class="secondary--text subtitle-2 mb-3 text-truncate">{{event.tournament_name}}</p>
-          <p class="black--text font-weight-menium subtitle-1 mb-3 text-truncate">{{event.opp_1_name}}</p>
-          <p class="black--text font-weight-menium subtitle-1 mb-0 text-truncate">{{event.opp_2_name}}</p>
-        </v-list-item-content>
+        <p class="secondary--text subtitle-2 mb-3 text-truncate">{{event.tournament_name}}</p>
+        <p class="black--text font-weight-menium subtitle-1 mb-3 text-truncate">{{event.opp_1_name}}</p>
+        <p class="black--text font-weight-menium subtitle-1 mb-0 text-truncate">{{event.opp_2_name}}</p>
+      </v-list-item-content>
     </v-list-item>
     <v-divider></v-divider>
     <v-list-item class="pb-3 pt-1">
