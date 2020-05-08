@@ -24,7 +24,7 @@
           <v-tab disabled>Statistics</v-tab>
         </v-tabs>
       </v-card>
-      <v-tabs-items v-model="tab">
+      <v-tabs-items class="secondary lighten-1" v-model="tab">
         <v-tab-item>
           <app-event-markets :markets="getMarkets"></app-event-markets>
         </v-tab-item>

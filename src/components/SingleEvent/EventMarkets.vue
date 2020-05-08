@@ -1,19 +1,18 @@
 <template>
-  <div class="markets">
+  <v-container>
     <v-expansion-panels
     multiple
-    focusable
-    tile
     >
       <v-expansion-panel
       v-for="market in getMarkets"
       :key="market.oc_group_name"
+      class="my-1"
       >
-        <v-expansion-panel-header
-        >
+        <v-expansion-panel-header>
         {{ market[0].oc_group_name }}
         </v-expansion-panel-header>
         <v-expansion-panel-content>
+          <v-divider></v-divider>
           <v-container
           fluid
           class="pa-0"
@@ -31,7 +30,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -49,3 +48,5 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+</style>
