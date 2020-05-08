@@ -2,7 +2,19 @@
   <v-container>
     <div class="betslip-wrapper">
     <v-card flat tile v-if="getBetSlip.length > 0">
-      <v-card-title class="display-1 font-weight-black">BET SLIP</v-card-title>
+      <div class="d-flex justify-space-between">
+        <v-card-title class="display-1 font-weight-black">BET SLIP</v-card-title>
+        <v-card-actions>
+          <div class="text-center">
+            <p class="caption text--secondary font-weight-medium mb-1">Selections</p>
+            <v-chip label color="accent" class="white--text justify-center font-weight-medium w-100">{{getBetSlipCount}}</v-chip>
+          </div>
+          <div class="text-center ml-4">
+            <p class="caption text--secondary font-weight-medium mb-1">Total odds</p>
+            <v-chip label color="primary darken-1" class="white--text justify-center font-weight-medium w-100">{{getTotalOdd}}</v-chip>
+          </div>
+        </v-card-actions>
+      </div>
       <v-list
       >
       <app-bet-slip-item v-for="selection in getBetSlip" :key="selection.pointer" :selection="selection"></app-bet-slip-item>
@@ -28,7 +40,9 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'getBetSlip'
+      'getBetSlip',
+      'getBetSlipCount',
+      'getTotalOdd'
     ])
   },
   methods: {
@@ -41,6 +55,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.w-100 {
+  width: 100%;
+}
 .betslip-wrapper {
   position: relative;
   &::before {

@@ -14,6 +14,13 @@ const getters = {
   },
   getBetSlipCount: state => {
     return state.betslip.length;
+  },
+  getTotalOdd: state => {
+    let totalOdd = 1;
+    state.betslip.forEach(bet => {
+      totalOdd = totalOdd*bet.odd;
+    });
+    return totalOdd.toFixed(2);
   }
 }
 
