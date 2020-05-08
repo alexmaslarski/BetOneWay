@@ -18,10 +18,24 @@
           </v-col>
           <v-col class="text-right pr-4"><h3>{{getEvent.opp_2_name}}</h3></v-col>
         </v-row>
+        <v-tabs color="success" centered grow class="px-4" v-model="tab">
+          <v-tab>Markets</v-tab>
+          <v-tab>Tips</v-tab>
+          <v-tab disabled>Statistics</v-tab>
+        </v-tabs>
       </v-card>
-      <app-event-markets
-      :markets="getMarkets"
-      ></app-event-markets>
+      <v-tabs-items v-model="tab">
+        <v-tab-item>
+          <app-event-markets :markets="getMarkets"></app-event-markets>
+        </v-tab-item>
+        <v-tab-item>
+          <h2>Tab 2</h2>
+        </v-tab-item>
+        <v-tab-item disabled>
+          <h2>Tab 3</h2>
+        </v-tab-item>
+      </v-tabs-items>
+      
     </div>
   </v-skeleton-loader>
 </template>
@@ -37,7 +51,8 @@ export default {
   data() {
     return {
       id: this.$route.params.id,
-      loading: true
+      loading: true,
+      tab: null
     }
   },
   watch: {
