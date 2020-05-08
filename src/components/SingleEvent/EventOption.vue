@@ -2,10 +2,13 @@
   <v-col
   cols="4"
   class="text-center px-1"
-  :class="{ active : isActive }"
-  @click="addToBetSlip(option.oc_group_name, option.oc_name, option.oc_rate, option.oc_pointer)"
   >
-  <v-card outlined class="pa-2 selection-card">
+  <v-card
+  :class="{ active : isActive }"
+  class="pa-2 selection-card"
+  @click="addToBetSlip(option.oc_group_name, option.oc_name, option.oc_rate, option.oc_pointer)"
+  outlined
+  >
     <p class="secondary--text mb-1" >{{ option.oc_name }}</p>
     <p class="mb-0">{{ option.oc_rate }}</p>
   </v-card>
@@ -48,12 +51,16 @@ export default {
 }
 </script>
 
-<style scoped>
-  .active {
-    color: #F57F17;
+<style lang="scss" scoped>
+.selection-card {
+  background-color: #f6f7f9;
+  border-color: #D7D7D7;
+  &.active {
+    background-color: rgba(254, 172, 14, 0.15);
+    border-color: #FEAC0E;
+    p {
+      color: #000000;
+    }
   }
-  .selection-card {
-    background-color: #f6f7f9;
-    border-color: #D7D7D7 !important;
-  }
+}
 </style>
