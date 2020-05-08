@@ -1,6 +1,9 @@
-import { db } from '@/helpers/firebaseConfig'
+import Vue from 'vue';
+import { db, auth } from '@/helpers/firebaseConfig'
 import { firestoreAction } from 'vuexfire'
+import firebase from 'firebase/app'
 import 'firebase/firestore'
+import router from '@/router/index'
 const state = {
   betslip: []
 };

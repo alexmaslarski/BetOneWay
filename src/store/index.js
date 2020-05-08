@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import events from './modules/Events'
 import event from './modules/Event'
 import posts from './modules/Posts/Posts'
+import createBet from './modules/Posts/CreateBet'
 import user from './modules/User'
 import { vuexfireMutations } from 'vuexfire'
 Vue.use(Vuex)
@@ -17,6 +18,7 @@ export default new Vuex.Store({
     events,
     event,
     user,
-    posts
+    posts,
+    createBet
   }
 })

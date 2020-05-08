@@ -32,13 +32,15 @@ export default {
       this.isActive=!this.isActive
       let eventName = `${this.getEvent.opp_1_name} - ${this.getEvent.opp_2_name}`;
       let gameId = /(.*?)\|/g.exec(pointer);
+      let gameStart = this.getEvent.game_start;
       let betSelection = {
       market,
       selection,
       odd,
       gameId: gameId[1],
       pointer,
-      eventName
+      eventName,
+      gameStart
     }
       this.$store.dispatch('updateBetSlip', betSelection)
     }
