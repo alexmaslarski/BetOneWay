@@ -27,7 +27,7 @@
       <transition name="slide" mode="out-in">
       <router-view></router-view>
       </transition>
-      <swipeable-bottom-sheet class="bottom-sheet" ref="swipeableBottomSheet">
+      <swipeable-bottom-sheet class="bottom-sheet" ref="swipeableBottomSheet" :halfY="11">
       <app-bet-slip></app-bet-slip>
       </swipeable-bottom-sheet>
     </v-content>
