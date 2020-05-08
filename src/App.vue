@@ -27,6 +27,9 @@
       <transition name="slide" mode="out-in">
       <router-view></router-view>
       </transition>
+      <swipeable-bottom-sheet class="bottom-sheet" ref="swipeableBottomSheet">
+      <app-bet-slip></app-bet-slip>
+      </swipeable-bottom-sheet>
     </v-content>
 
     <!-- Bottom nav -->
@@ -51,7 +54,7 @@
         <v-icon>mdi-earth</v-icon>
       </v-btn>
   </v-bottom-navigation>
-  
+    
   </v-app>
 </template>
 
@@ -59,18 +62,39 @@
 import Vue from 'vue';
 import { mapGetters } from 'vuex';
 import firebase from "firebase";
+import BetSlip from '@/components/BetSlip/BetSlipListing'
+import { SwipeableBottomSheet } from "vue-swipeable-bottom-sheet";
 export default {
   name: 'App',
+  components: {
+    'app-bet-slip': BetSlip,
+    SwipeableBottomSheet
+  },
+  data () {
+    return {
+    }
+  },
   mounted () {
     firebase.auth().onAuthStateChanged(user => {
       this.$store.dispatch('updateUser', user)
     });
+    this.$refs.swipeableBottomSheet.setState("close")
   },
     computed: {
     ...mapGetters([
       'getUser',
-      'getBetSlipCount'
+      'getBetSlipCount',
+      'getBetSlipOpened'
     ])
+  },
+  watch: {
+    getBetSlipCount(newState) {
+      if(newState > 0) {
+        this.$refs.swipeableBottomSheet.setState("half")
+      }else {
+        this.$refs.swipeableBottomSheet.setState("close")
+      }
+    }
   },
   methods: {
     logOut() {
@@ -89,6 +113,16 @@ export default {
 };
 </script>
 <style lang="scss">
+.bottom-sheet {
+  z-index: 3;
+  & > .card {
+    z-index: 3;
+    background: #f0f2f5 !important;
+  }
+  & > .pan-area {
+    padding: 20px 0;
+  }
+}
 .slide-enter {
       opacity: 0;
   }

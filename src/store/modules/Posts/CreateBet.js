@@ -14,7 +14,7 @@ const getters = {
   },
   getBetSlipCount: state => {
     return state.betslip.length;
-  },
+  }
 }
 
 const mutations = {
