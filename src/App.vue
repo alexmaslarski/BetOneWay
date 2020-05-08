@@ -89,9 +89,9 @@ export default {
   },
   watch: {
     getBetSlipCount(newState) {
-      if(newState > 0) {
+      if(newState > 0 && this.$refs.swipeableBottomSheet.state !== "open") {
         this.$refs.swipeableBottomSheet.setState("half")
-      }else {
+      }else if(newState <= 0){
         this.$refs.swipeableBottomSheet.setState("close")
       }
     }
