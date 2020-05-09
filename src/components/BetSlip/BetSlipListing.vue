@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <div class="betslip-wrapper">
+    <div class="betslip-wrapper mb-12">
     <v-card flat tile v-if="getBetSlip.length > 0">
       <div class="d-flex justify-space-between">
         <v-card-title class="display-1 font-weight-black secondary--text">BET SLIP</v-card-title>
@@ -33,14 +33,40 @@
       <v-list>
         <app-bet-slip-item v-for="selection in getBetSlip" :key="selection.pointer" :selection="selection"></app-bet-slip-item>
       </v-list>
-      <v-card-actions>
-        <v-row>
-          <v-col><v-btn @click="placeBet" color="success">PLACE BETS</v-btn></v-col>
-          <v-col><v-btn @click="clearBetSlip" >CLEAR</v-btn></v-col>
-        </v-row>
-      </v-card-actions>
+      <v-list>
+        <v-list-item>
+          <v-textarea v-model="analysis" auto-grow rows="1" placeholder="Write your analysis"></v-textarea>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-subtitle>Adjust stake</v-list-item-subtitle>
+            <v-slider color="primary darken-1" v-model="stake" min="1" max="10" thumb-label thumb-size="20"></v-slider>
+          </v-list-item-content>
+        </v-list-item>
+        <div class="d-flex justify-space-between px-4">
+          <div>
+            <p class="caption text--secondary font-weight-medium mb-1">Paid</p>
+            <v-switch class="mt-0" inset flat></v-switch>
+          </div>
+          <div class="d-flex">
+            <div class="text-center">
+            <p class="caption text--secondary font-weight-medium mb-1">Selections</p>
+            <v-chip label color="accent" class="white--text justify-center font-weight-medium w-100">{{getBetSlipCount}}</v-chip>
+            </div>
+            <div class="text-center ml-4">
+            <p class="caption text--secondary font-weight-medium mb-1">Stake</p>
+            <v-chip label color="success" class="white--text justify-center font-weight-medium w-100">{{stake}} / 10</v-chip>
+            </div>
+            <div class="text-center ml-4">
+              <p class="caption text--secondary font-weight-medium mb-1">Total odds</p>
+              <v-chip label color="primary darken-1" class="white--text justify-center font-weight-medium w-100">{{getTotalOdd}}</v-chip>
+            </div>
+          </div>
+        </div>
+      </v-list>
     </v-card>
     </div>
+    <v-btn block x-large @click="placeBet" color="primary darken-1" class="mb-12">Submit Tips</v-btn>
   </v-container>
 </template>
 
@@ -53,7 +79,9 @@ export default {
   },
   data () {
     return {
-      now: ''
+      now: '',
+      analysis: '',
+      stake: 1
     }
   },
   components: {
