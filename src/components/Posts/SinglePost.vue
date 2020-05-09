@@ -1,22 +1,24 @@
 <template>
-    <v-card class="mb-3">
+    <v-card :class="[expanded ? 'margin-bottom' : 'mb-3']">
         <v-list-item two-line>
         <v-list-item-avatar>
-          <img :src="author.photoUrl" alt="">
+          <img :src="post.author.photoUrl" alt="">
         </v-list-item-avatar>
         <v-list-item-content>
-          <v-list-item-title>{{author.name}}</v-list-item-title>
-          <v-list-item-subtitle>{{bet.timeStamp.toDate() | moment("from", "now")}}</v-list-item-subtitle>
+          <v-list-item-title>{{post.author.name}}</v-list-item-title>
+          <v-list-item-subtitle>{{post.bet.timeStamp.toDate() | moment("from", "now")}}</v-list-item-subtitle>
         </v-list-item-content>
         <div>
-            <v-chip small v-if="bet.selection.length > 1" class="font-weight-medium" color="accent">COMBO</v-chip>
-            <v-chip small v-if="bet.live" class="font-weight-medium ml-1" color="error">LIVE</v-chip>
+            <v-chip small v-if="post.bet.selection.length > 1" class="font-weight-medium" color="accent">COMBO</v-chip>
+            <v-chip small v-if="post.bet.live" class="font-weight-medium ml-1" color="error">LIVE</v-chip>
         </div>
         </v-list-item>
+
+
       <v-divider></v-divider>
       <router-link :to="{ name: 'Post', params: { id: post.postID }}" tag="div">
-      <template v-for="(game, index) in bet.selection">
-        <v-list-item :key="game.pointer" class="border" :class="[index === bet.selection.length - 1 ? 'double' : '']">
+      <template v-for="(game, index) in post.bet.selection">
+        <v-list-item :key="game.pointer" class="border" :class="[index === post.bet.selection.length - 1 ? 'double' : '']">
           <v-list-item-content>
             <v-list-item-title class="font-weight-medium mb-3">{{game.selection}}</v-list-item-title>
             <v-list-item-subtitle class="mb-3">{{game.market}}</v-list-item-subtitle>
@@ -31,6 +33,8 @@
         </v-list-item>
       </template>
         </router-link>
+
+
       <template>
         <v-list-item class="py-3">
           <v-list-item-content>
@@ -41,11 +45,11 @@
               </div>
               <div class="mr-5 text-center">
                 <p class="mb-1 caption text--secondary">Total Odd</p>
-                <v-chip small>{{bet.totalOdd}}</v-chip>
+                <v-chip small>{{post.bet.totalOdd}}</v-chip>
               </div>
               <div class="mr-5 text-center">
                 <p class="mb-1 caption text--secondary">Stake</p>
-                <v-chip small>{{bet.stake}}/10</v-chip>
+                <v-chip small>{{post.bet.stake}}/10</v-chip>
               </div>
             </v-row>
           </v-list-item-content>
@@ -62,9 +66,29 @@
           </v-list-item-action>
         </v-list-item>
       </template>
+
+
+      <template v-if="expanded">
+        <v-divider></v-divider>
+        <v-list-item v-for="comment in post.comments.slice().reverse()" :key="comment.timeStamp">
+          <v-list-item-avatar class="align-self-start mt-4">
+            <img :src="comment.commentAuthor.photoUrl" alt="">
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-card flat color="secondary lighten-1" class="pa-2">
+            <v-list-item-title class="font-weight-medium mb-3 subtitle-2">{{comment.commentAuthor.name}}</v-list-item-title>
+            <p class="mb-0">{{comment.commentText}}</p>
+            </v-card>
+            <v-list-item-subtitle>{{comment.timeStamp.toDate() | moment("from", "now")}}</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+      </template>
+
+
+
       <template>
         <v-divider></v-divider>
-        <v-list-item>
+        <v-list-item :class="{'comment-fixed' : expanded}">
           <v-list-item-content>
           <v-textarea v-model="comment" rows="1" single-line auto-grow rounded dense hide-details filled label="Post a comment">
             <template slot="prepend">
@@ -89,13 +113,11 @@
 
 export default {
 props: {
-    post: Object
+    post: Object,
+    expanded: Boolean
   },
   data () {
     return {
-      author: this.post.author,
-      comments: this.post.comments,
-      bet: this.post.bet,
       comment: ''
     }
   },
@@ -148,5 +170,15 @@ props: {
   &.double {
     border-bottom: 3px solid #f6f7f9;
   }
+}
+.comment-fixed {
+  position: fixed;
+  bottom: 56px;
+  left: 0;
+  width: 100%;
+  background-color: white;
+}
+.margin-bottom {
+  margin-bottom: 70px !important;
 }
 </style>

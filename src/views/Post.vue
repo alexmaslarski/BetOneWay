@@ -1,6 +1,6 @@
 <template>
   <v-container>
-      <app-post v-if="post" :post="post"></app-post>
+      <app-post v-if="post" :post="post" :expanded="true"></app-post>
   </v-container>
 </template>
 
@@ -21,6 +21,8 @@ export default {
   },
   watch: {
     getPosts() {
+      console.log('change');
+      
       this.updatePostByID();
     }
   },
@@ -32,6 +34,8 @@ export default {
   },
   methods: {
     updatePostByID: function(){
+      console.log('change inside');
+      
       this.post = this.$store.getters.getPostByID(this.id)
     },
     ...mapActions([
