@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <app-post :post="post"></app-post>
+      <app-post v-if="post" :post="post"></app-post>
   </v-container>
 </template>
 
@@ -15,8 +15,7 @@ export default {
   },
   data() {
     return {
-      loading: false,
-      post: [],
+      post: {},
       id: this.$route.params.id
     }
   },
@@ -40,7 +39,10 @@ export default {
     ])
   },
   created() {
-    this.post = this.$store.getters.getPostByID(this.id)
+    this.$store.dispatch('bindPosts')
+    this.updatePostByID();
+    
+    
   }
 }
 </script>
