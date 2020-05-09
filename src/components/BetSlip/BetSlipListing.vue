@@ -20,7 +20,7 @@
         </v-card-actions>
         </transition>
       </div>
-        <div class="d-flex justify-space-between px-4 py-5">
+        <div class="d-flex justify-space-between px-4 py-5 perforated">
           <div>
             <p class="caption text--secondary mb-1">Posted By:</p>
             <p class="font-weight-medium mb-0">{{getUser.displayName}}</p>
@@ -112,6 +112,33 @@ export default {
   width: 100%;
   height: 40px;
   z-index: -1;
+  }
+}
+.perforated {
+  border-bottom: 2px dashed #f6f7f9;
+  position: relative;
+  &::before {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: -10px;
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    background-color: #f0f2f5;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    right: -10px;
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    background-color: #f0f2f5;
+    min-height: unset;
   }
 }
 </style>
