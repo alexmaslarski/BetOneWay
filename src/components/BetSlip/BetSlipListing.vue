@@ -3,8 +3,9 @@
     <div class="betslip-wrapper">
     <v-card flat tile v-if="getBetSlip.length > 0">
       <div class="d-flex justify-space-between">
-        <v-card-title class="display-1 font-weight-black">BET SLIP</v-card-title>
-        <v-card-actions>
+        <v-card-title class="display-1 font-weight-black secondary--text">BET SLIP</v-card-title>
+        <transition name="fade" mode="out-in" >
+        <v-card-actions v-if="isBetSlipOpen != 'open'">
           <div class="text-center">
             <p class="caption text--secondary font-weight-medium mb-1">Selections</p>
             <v-chip label color="accent" class="white--text justify-center font-weight-medium w-100">{{getBetSlipCount}}</v-chip>
@@ -14,11 +15,23 @@
             <v-chip label color="primary darken-1" class="white--text justify-center font-weight-medium w-100">{{getTotalOdd}}</v-chip>
           </div>
         </v-card-actions>
+        <v-card-actions v-else class="pa-4">
+          <v-btn depressed small color="#d7d7d7" @click="clearBetSlip" ><v-icon color="white">mdi-trash-can-outline</v-icon></v-btn>
+        </v-card-actions>
+        </transition>
       </div>
-      <v-list
-      >
-      <app-bet-slip-item v-for="selection in getBetSlip" :key="selection.pointer" :selection="selection"></app-bet-slip-item>
-
+        <div class="d-flex justify-space-between px-4 py-5">
+          <div>
+            <p class="caption text--secondary mb-1">Posted By:</p>
+            <p class="font-weight-medium mb-0">{{getUser.displayName}}</p>
+          </div>
+          <div class="text-right">
+            <p class="caption text--secondary mb-1">Time Posted:</p>
+            <p class="font-weight-medium mb-0">{{now | moment("D MMMM, HH:mm")}}</p>
+          </div>
+        </div>
+      <v-list>
+        <app-bet-slip-item v-for="selection in getBetSlip" :key="selection.pointer" :selection="selection"></app-bet-slip-item>
       </v-list>
       <v-card-actions>
         <v-row>
@@ -35,17 +48,33 @@
 import { mapGetters, mapActions } from 'vuex';
 import BetSlipItem from './BetSlipItem'
 export default {
+  props: {
+    isBetSlipOpen: String
+  },
+  data () {
+    return {
+      now: ''
+    }
+  },
   components: {
     'app-bet-slip-item': BetSlipItem
+  },
+  created() {
+    setInterval(this.getNow, 1000);
   },
   computed: {
     ...mapGetters([
       'getBetSlip',
       'getBetSlipCount',
-      'getTotalOdd'
+      'getTotalOdd',
+      'getUser'
     ])
   },
   methods: {
+    getNow: function() {
+      this.now = this.$moment()
+
+    },
     ...mapActions([
       'placeBet',
       'clearBetSlip'

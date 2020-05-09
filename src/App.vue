@@ -28,7 +28,7 @@
       <router-view></router-view>
       </transition>
       <swipeable-bottom-sheet class="bottom-sheet" ref="swipeableBottomSheet">
-      <app-bet-slip></app-bet-slip>
+      <app-bet-slip :isBetSlipOpen="isBetSlipOpen"></app-bet-slip>
       </swipeable-bottom-sheet>
     </v-content>
 
@@ -72,6 +72,7 @@ export default {
   },
   data () {
     return {
+      isBetSlipOpen: 'close'
     }
   },
   mounted () {
@@ -79,6 +80,13 @@ export default {
       this.$store.dispatch('updateUser', user)
     });
     this.$refs.swipeableBottomSheet.setState("close")
+    this.$watch(
+        () => {
+            return this.$refs.swipeableBottomSheet.state
+        },
+      (val) => {
+        this.isBetSlipOpen = val;
+      })
   },
     computed: {
     ...mapGetters([
