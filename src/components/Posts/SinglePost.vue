@@ -44,7 +44,7 @@
           </v-row>
         </v-list-item-content>
         <v-list-item-action>
-          <v-btn @click="like" fab color="primary justify-self-end">
+          <v-btn @click="handleLike" fab color="primary justify-self-end">
             <v-icon class="white--text">mdi-thumb-up-outline</v-icon>
           </v-btn>
         </v-list-item-action>
@@ -89,6 +89,18 @@ props: {
   computed: {
     user () {
       return this.$store.getters.getUser
+    },
+    isLiked () {
+      let likesArray = this.post.likedBy
+      let isLiked = false
+      if(likesArray.length > 0 && likesArray) {
+        for (var i in likesArray) {
+          if (likesArray[i] == this.user.uid){
+            isLiked = true;
+          }
+        }
+      }
+      return isLiked;
     }
   },
   methods: {
@@ -105,13 +117,13 @@ props: {
         
       })
     },
-    like: function() {
+    handleLike: function() {
       let postID = this.post.postID;
-      return this.$store.dispatch('addLike', postID)
-      .then(() => {
-        this.comment = '';
-        
-      })
+      if(this.isLiked){
+        this.$store.dispatch('removeLike', postID)
+      }else {
+        this.$store.dispatch('addLike', postID)
+      }
     }
   }
 }

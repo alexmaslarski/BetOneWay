@@ -97,7 +97,8 @@ const actions = {
         bet,
         comments: {},
         commentCount: 0,
-        likes: 0
+        likes: 0,
+        likedBy: []
       })
       .then((docRef) => {
         db.collection('posts').doc(docRef.id).update({

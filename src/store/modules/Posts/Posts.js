@@ -42,43 +42,42 @@ const actions = {
     let postID = payload;
     let likedBy = auth.currentUser.uid
     const increment = firebase.firestore.FieldValue.increment(1);
+    db.collection('posts').doc(postID).update({
+      likedBy: firebase.firestore.FieldValue.arrayUnion(likedBy),
+      likes: increment
+    })
+  }),
+  removeLike: firestoreAction((context, payload) => {
+    let postID = payload;
+    let likedBy = auth.currentUser.uid
     const decrement = firebase.firestore.FieldValue.increment(-1);
-    // var ref = firebase.database().ref(`/posts/${postID}/likedBy`);
-      db.collection('posts').doc(postID).get().then(snap => {
-        console.log(snap);
-        console.log(snap.data());
-        let isLiked = false;
-        var array = snap.data().likedBy;
-        if(array.length > 0) {
-          for (var i in array) {
-            var value = array[i]
-            if (value == likedBy){
-              console.log('already liked');
-              isLiked = true
-            }
-          }
-          if (isLiked) {
-            db.collection('posts').doc(postID).update({
-              likedBy: firebase.firestore.FieldValue.arrayRemove(likedBy),
-              likes: decrement
-            })
-          }else {
-            db.collection('posts').doc(postID).update({
-              likedBy: firebase.firestore.FieldValue.arrayUnion(likedBy),
-              likes: increment
-            })
-          }
-        }else {
-          console.log('no likes');
-          
-          db.collection('posts').doc(postID).update({
-            likedBy: firebase.firestore.FieldValue.arrayUnion(likedBy),
-            likes: increment
-          })
-        }
-      });
+    db.collection('posts').doc(postID).update({
+      likedBy: firebase.firestore.FieldValue.arrayRemove(likedBy),
+      likes: decrement
+    })
   })
 }
+//   isLiked: (context, postID) => {
+//     let likedBy = auth.currentUser.uid
+//     return db.collection('posts').doc(postID).get().then(snap => {
+//       var likesArray = snap.data().likedBy;
+//       let isLiked = false;
+//       if(likesArray.length > 0) {
+//         for (var i in likesArray) {
+//           var value = likesArray[i]
+//           if (value == likedBy){
+//             isLiked = true;
+//           }else {
+//             isLiked = false;
+//           }
+//         }
+//       }else {
+//         isLiked =  false
+//       }
+//       return isLiked
+//     });
+//   }
+// }
 
 export default {
   state,
