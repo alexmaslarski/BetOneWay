@@ -21,8 +21,6 @@ export default {
   },
   watch: {
     getPosts() {
-      console.log('change');
-      
       this.updatePostByID();
     }
   },
@@ -34,8 +32,6 @@ export default {
   },
   methods: {
     updatePostByID: function(){
-      console.log('change inside');
-      
       this.post = this.$store.getters.getPostByID(this.id)
     },
     ...mapActions([
@@ -45,8 +41,6 @@ export default {
   created() {
     this.$store.dispatch('bindPosts')
     this.updatePostByID();
-    
-    
   }
 }
 </script>

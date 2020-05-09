@@ -68,7 +68,7 @@
       </template>
 
 
-      <template v-if="expanded">
+      <template v-if="expanded && post.comments.length > 0">
         <v-divider></v-divider>
         <v-list-item v-for="comment in post.comments.slice().reverse()" :key="comment.timeStamp">
           <v-list-item-avatar class="align-self-start mt-4">
