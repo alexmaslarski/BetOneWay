@@ -7,10 +7,10 @@
           <v-list-item-subtitle class="mb-2">{{ selection.eventName }}</v-list-item-subtitle>
           <v-list-item-subtitle>{{ selection.tournament }}</v-list-item-subtitle>
         </v-list-item-content>
-        <v-list-item-actions class="py-3 d-flex flex-column justify-space-between">
+        <v-list-item-action class="py-3 my-0 d-flex flex-column justify-space-between">
           <v-icon color="#d7d7d7" @click="clearBetById(selection.pointer)" icon>mdi-close-circle</v-icon>
           <v-chip small color="accent" class="white--text font-weight-medium">{{selection.odd}}</v-chip>
-        </v-list-item-actions>
+        </v-list-item-action>
       </v-list-item>
       </transition>
 </template>

@@ -56,16 +56,53 @@ const actions = {
       });
     }
   },
-  placeBet: firestoreAction(({ state, dispatch }) => {
+  placeBet: firestoreAction(({ state, dispatch }, payload) => {
     if(auth.currentUser){
       let userID = auth.currentUser.uid;
       let timeStamp = new Date();
+      let totalOdd = payload.totalOdd;
+      let stake = payload.stake;
+      let analysis = payload.analysis;
+      let paid = payload.paid;
+      let live = false;
+      let combo;
+      state.betslip.length > 1 ? combo = true : combo = false;
+      state.betslip.forEach(event => {
+        if(event.in_play){
+          live = true;
+        }
+      });
       let bet = {
         selection: state.betslip,
-        timeStamp
+        timeStamp,
+        totalOdd,
+        stake,
+        analysis,
+        paid,
+        live,
+        combo
       }
+      console.log(bet);
+      
       db.collection('users').doc(userID).update({
         betHistory: firebase.firestore.FieldValue.arrayUnion(bet)
+      })
+      db.collection('posts').add({
+        author: {
+          name: auth.currentUser.displayName,
+          userID: userID,
+          email: auth.currentUser.email,
+          photoUrl: auth.currentUser.photoURL
+        },
+        bet,
+        comments: {},
+        commentCount: 0,
+        likes: 0
+      })
+      .then((docRef) => {
+        db.collection('posts').doc(docRef.id).update({
+          postID: docRef.id
+        })
       })
   
       .then(() => {

@@ -46,7 +46,7 @@
         <div class="d-flex justify-space-between px-4">
           <div>
             <p class="caption text--secondary font-weight-medium mb-1">Paid</p>
-            <v-switch class="mt-0" inset flat></v-switch>
+            <v-switch class="mt-0" inset flat v-model="paid"></v-switch>
           </div>
           <div class="d-flex">
             <div class="text-center">
@@ -81,7 +81,8 @@ export default {
     return {
       now: '',
       analysis: '',
-      stake: 1
+      stake: 1,
+      paid: false
     }
   },
   components: {
@@ -103,8 +104,23 @@ export default {
       this.now = this.$moment()
 
     },
+    placeBet: function(){
+      let totalOdd = this.getTotalOdd;
+      let stake = this.stake
+      let analysis = this.analysis;
+      let paid = this.paid
+      let betSlipInfo = {
+        totalOdd,
+        stake,
+        analysis,
+        paid
+      }
+      this.$store.dispatch('placeBet', betSlipInfo)
+      this.analysis = '';
+      this.stake = 1;
+      this.paid = false;
+    },
     ...mapActions([
-      'placeBet',
       'clearBetSlip'
     ])
   }
