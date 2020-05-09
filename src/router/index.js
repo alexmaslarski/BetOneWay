@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import { auth } from '@/helpers/firebaseConfig'
 // Pages
 import Feed from '@/views/Feed.vue'
+import Post from '@/views/Post.vue'
 import Activity from '@/views/Activity.vue'
 import Events from '@/views/Events/Events.vue'
 import AllEvents from '@/views/Events/AllEvents.vue'
@@ -20,6 +21,11 @@ Vue.use(VueRouter)
     path: '/',
     name: 'Feed',
     component: Feed
+  },
+  {
+    path: '/post/:id',
+    name: 'Post',
+    component: Post
   },
   {
     path: '/profile',

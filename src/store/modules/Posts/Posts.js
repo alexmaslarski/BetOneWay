@@ -9,13 +9,14 @@ const state = {
 const getters = {
   getPosts: state => {
     return state.posts
+  },
+  getPostByID: (state) => (id) => {
+    return state.posts.find(post => post.postID === id)
   }
 }
 
 const actions = {
   bindPosts: firestoreAction(({ bindFirestoreRef }) => {
-    console.log('binded');
-    
     bindFirestoreRef('posts', db.collection('posts').orderBy('bet.timeStamp', 'desc'))
   }),
   addComment: firestoreAction((context, payload) => {
