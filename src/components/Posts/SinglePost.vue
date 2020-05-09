@@ -44,8 +44,14 @@
           </v-row>
         </v-list-item-content>
         <v-list-item-action>
-          <v-btn @click="handleLike" fab color="primary justify-self-end">
-            <v-icon class="white--text">mdi-thumb-up-outline</v-icon>
+          <v-btn
+          @click="handleLike"
+          fab
+          depressed
+          class="primary justify-self-end"
+          :class="[isLiked ? 'primary white--text' : 'secondary lighten-1 primary--text']"
+          >
+            <v-icon>mdi-thumb-up-outline</v-icon>
           </v-btn>
         </v-list-item-action>
       </v-list-item>
