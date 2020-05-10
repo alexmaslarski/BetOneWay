@@ -12,6 +12,9 @@ const getters = {
   },
   getPostByID: (state) => (id) => {
     return state.posts.find(post => post.postID === id)
+  },
+  getPostByAuthor: (state) => (authorID) => {
+    return state.posts.filter(post => post.author.userID === authorID)
   }
 }
 

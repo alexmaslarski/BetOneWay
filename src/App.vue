@@ -77,6 +77,8 @@ export default {
   },
   mounted () {
     firebase.auth().onAuthStateChanged(user => {
+      console.log(user);
+      
       this.$store.dispatch('updateUser', user)
     });
     this.$refs.swipeableBottomSheet.setState("close")

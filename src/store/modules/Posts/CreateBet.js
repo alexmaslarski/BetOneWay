@@ -82,12 +82,7 @@ const actions = {
         live,
         combo
       }
-      console.log(bet);
-      
-      db.collection('users').doc(userID).update({
-        betHistory: firebase.firestore.FieldValue.arrayUnion(bet)
-      })
-      db.collection('posts').add({
+      let post = {
         author: {
           name: auth.currentUser.displayName,
           userID: userID,
@@ -99,6 +94,14 @@ const actions = {
         commentCount: 0,
         likes: 0,
         likedBy: []
+      }
+      console.log(post);
+      
+      db.collection('users').doc(userID).update({
+        posts: firebase.firestore.FieldValue.arrayUnion(post)
+      })
+      db.collection('posts').add({
+        post
       })
       .then((docRef) => {
         db.collection('posts').doc(docRef.id).update({

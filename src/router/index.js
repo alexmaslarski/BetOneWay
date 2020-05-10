@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import { auth } from '@/helpers/firebaseConfig'
+import store from '../store/index'
+// import { auth } from '@/helpers/firebaseConfig'
 // Pages
 import Feed from '@/views/Feed.vue'
 import Post from '@/views/Post.vue'
@@ -28,15 +29,38 @@ Vue.use(VueRouter)
     component: Post
   },
   {
-    path: '/profile',
+    path: '/profile/:id?',
     name: 'Profile',
     component: Profile,
+    props: true,
     beforeEnter: (to, from, next) => {
-      if(auth.currentUser){
-        next()
-      }else {
-        next({path: '/signin/login'})
-      }
+      console.log(store.state.user);
+      
+        function proceed () {
+          console.log('proceed');
+          
+          if (store.state.user.userLoaded) {
+            if(store.state.user.user !== null || to.params.id){
+              next()
+            }else {
+              next('/signin/login')
+            }
+          }
+        }
+        if (!store.state.user.userLoaded) {
+          console.log(store.state.user.userLoaded);
+          
+          store.watch(
+            (state) => state.user.userLoaded,
+            (value) => {
+              if (value === true) {
+                proceed()
+              }
+            }
+          )
+        } else {
+          proceed()
+        }
     }
   },
   {

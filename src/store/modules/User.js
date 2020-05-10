@@ -1,26 +1,21 @@
 import Vue from 'vue';
-import { db, auth } from '@/helpers/firebaseConfig'
-import { firestoreAction } from 'vuexfire'
+import { db } from '@/helpers/firebaseConfig'
 import firebase from 'firebase/app'
 import 'firebase/firestore'
 const state = {
   user: null,
-  userInfo: []
+  userLoaded: false
 }
 
 const mutations = {
   'UPDATE_USER': (state, payload) => {
     state.user = payload;
+    state.userLoaded = true;
   }
 }
 const getters = {
   getUser: state => {
     return state.user;
-  },
-  getBetHistory: state => {
-    if(state.userInfo.betHistory){
-      return state.userInfo.betHistory;
-    }
   }
 }
 
@@ -61,7 +56,6 @@ const actions = {
             accountCreated: authResult.user.metadata.creationTime,
             lastSignIn: authResult.user.metadata.lastSignInTime,
           })
-
           dispatch('updateUser', authResult)
         }
       )
@@ -77,17 +71,10 @@ const actions = {
         }
       )
   },
-  updateUser: ({commit, dispatch}, user) => {
+  updateUser: ({commit}, user) => {
     commit('UPDATE_USER', user);
-
-    if(user){
-      dispatch('bindUserInfo')
-    }
-  },
-  bindUserInfo: firestoreAction(({ bindFirestoreRef }) => {
-    bindFirestoreRef('userInfo', db.collection('users').doc(auth.currentUser.uid))
-  }),
-  
+    console.log('updateUser');
+  }
 }
 export default {
   state,
