@@ -25,8 +25,8 @@
           <v-row>
             <v-col>
               <div class="rating d-flex">
-              <p class="mb-0">{{getAvgRating}}</p>
-              <v-rating color="secondary" readonly x-small :value="getAvgRating" length="5" half-increments dense></v-rating>
+              <p class="mb-0">{{getAvgRating ? getAvgRating : 'No rating'}}</p>
+              <v-rating v-if="getAvgRating" color="secondary" readonly x-small :value="getAvgRating" length="5" half-increments dense></v-rating>
             </div>
             <p class="caption" v-if="getRating">{{getRating.length}} ratings</p>
             </v-col>
@@ -55,7 +55,7 @@
         <v-tab-item>
           <v-container>
          <v-card class="mt-3">
-           <v-list-item>
+           <v-list-item v-if="getProfilePosts && getProfilePosts.length > 0">
              <v-row class="ma-0">
                <v-col class="pa-0 align-center d-flex">
                 <v-list-item-subtitle>Last 5 tips</v-list-item-subtitle>
@@ -74,7 +74,7 @@
            </v-list-item>
          </v-card>
          
-           <v-row class="px-2 mt-2">
+           <v-row class="px-2 mt-2" v-if="getProfilePosts && getProfilePosts.length > 0">
              <v-col cols="6" class="pa-1">
                <v-card class="text-center py-6 px-2">
                  <v-list-item-subtitle class="secondary--text font-weight-medium">Profit</v-list-item-subtitle>
@@ -111,52 +111,7 @@
           <h2>Tab 3</h2>
         </v-tab-item>
       </v-tabs-items>
-      
     </div>
-  <!-- <v-container>
-    <v-card
-      v-if="getUser"
-      >
-      <v-btn @click='logOut' block>Logout</v-btn>
-        <v-img :src="getUser.photoURL" alt=""></v-img>
-        <v-card-title>{{ getUser.displayName }}</v-card-title>
-        <v-card-subtitle>{{ getUser.email }}</v-card-subtitle>
-        <v-divider></v-divider>
-        <template v-if="getBetHistory">
-        <v-card-title>
-          Bet History
-        </v-card-title>
-        <v-expansion-panels
-        multiple
-        focusable
-        tile
-        >
-          <v-expansion-panel
-          v-for="betGroup in getBetHistory"
-          :key="betGroup.timeStamp.seconds"
-          >
-            <v-expansion-panel-header>
-              {{ betGroup.timeStamp.toDate() | moment("DD MMMM, HH:mm") }}
-            </v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <v-container
-              fluid
-              class="py-0"
-              >
-              <v-list>
-                <app-bet-history-item v-for="betEvent in betGroup.selection" :key="betEvent.pointer" :event="betEvent"></app-bet-history-item>
-              </v-list>
-
-              </v-container>
-            </v-expansion-panel-content>
-
-          </v-expansion-panel>
-
-        </v-expansion-panels>
-        </template>
-
-      </v-card>
-  </v-container> -->
 </template>
 
 <script>
@@ -186,7 +141,7 @@ export default {
   computed: {
     isFollowed () {
       let isFollowed = false
-      if(this.getFollowers.length > 0 && this.getFollowers) {
+      if(this.getFollowers && this.getFollowers.length) {
         for (var i in this.getFollowers) {
           if (this.getFollowers[i] == this.getUser.uid){
             isFollowed = true;
@@ -197,7 +152,7 @@ export default {
     },
     isSubscribed () {
       let isSubscribed = false
-      if(this.getSubscribers.length > 0 && this.getSubscribers) {
+      if(this.getSubscribers && this.getSubscribers.length > 0) {
         for (var i in this.getSubscribers) {
           if (this.getSubscribers[i] == this.getUser.uid){
             isSubscribed = true;

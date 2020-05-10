@@ -30,7 +30,7 @@ const getters = {
   },
   getAvgRating: state => {
     let avgRating = 0;
-    if(state.profileInfo.rating.length > 0) {
+    if(state.profileInfo.rating && state.profileInfo.rating.length > 0) {
       state.profileInfo.rating.forEach(rating => {
         avgRating += rating.rate
       });
@@ -40,12 +40,12 @@ const getters = {
   },
   getAvgOdd: (state, getters) => {
     let avgOdd = 0;
-    getters.getBetHistory.forEach(bet => {
-      avgOdd += parseFloat(bet.totalOdd)
-    });
-    console.log(avgOdd);
-    
-    avgOdd = avgOdd / getters.getBetHistory.length;
+    if(getters.getBetHistory && getters.getBetHistory.length > 0){
+      getters.getBetHistory.forEach(bet => {
+        avgOdd += parseFloat(bet.totalOdd)
+      });
+      avgOdd = avgOdd / getters.getBetHistory.length;
+    }
     return avgOdd.toFixed(2)
   },
   getProfilePosts: state => {
@@ -53,31 +53,41 @@ const getters = {
   },
   getBetHistory: state => {
     let betHistory = [];
-    state.profilePosts.forEach(post => {
-      betHistory.push(post.bet)
-    });
+    if(state.profilePosts && state.profilePosts.length > 0) {
+      state.profilePosts.forEach(post => {
+        betHistory.push(post.bet)
+      });
+    }
       return betHistory;
   },
   getProfit: (state, getters) => {
     let profit = 0;
-    getters.getBetHistory.forEach(bet => {
-      profit += bet.profit
-    });
+    if(getters.getBetHistory && getters.getBetHistory.length > 0){
+      getters.getBetHistory.forEach(bet => {
+        profit += bet.profit
+      });
+    }
     return profit
   },
   getTotalStake: (state, getters) => {
     let stake = 0;
+    if(getters.getBetHistory && getters.getBetHistory.length > 0){
     getters.getBetHistory.forEach(bet => {
       stake += bet.stake
     });
+  }
     return stake
   },
   getAvgStake: (state, getters) => {
-    return (getters.getTotalStake / getters.getBetHistory.length).toFixed(2)
+    if(getters.getTotalStake && getters.getBetHistory && getters.getBetHistory.length){
+      return (getters.getTotalStake / getters.getBetHistory.length).toFixed(2)
+    }
   },
   getYield: (state, getters) => {
     let getYield = 0
-    getYield = (getters.getProfit / getters.getTotalStake) * 100
+    if(getters.getProfit && getters.getTotalStake){
+      getYield = (getters.getProfit / getters.getTotalStake) * 100
+    }
     return getYield.toFixed(2)
   }
 }
