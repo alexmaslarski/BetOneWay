@@ -32,7 +32,7 @@
           </v-list-item-action>
         </v-list-item>
       </template>
-        </router-link>
+        
 
 
       <template>
@@ -55,7 +55,7 @@
           </v-list-item-content>
           <v-list-item-action>
             <v-btn
-            @click="handleLike"
+            @click.stop="handleLike"
             fab
             depressed
             class="primary justify-self-end"
@@ -65,12 +65,19 @@
             </v-btn>
           </v-list-item-action>
         </v-list-item>
+        <v-list-item v-if="post.likes > 0 || post.commentCount > 0">
+          <v-row>
+            <p v-if="post.likes > 0" class="subtitle-2 font-weight-regular secondary--text px-3">{{post.likes}} likes</p>
+            <p v-if="post.commentCount > 0" class="subtitle-2 font-weight-regular secondary--text px-3">{{post.commentCount}} comments</p>
+          </v-row>
+        </v-list-item>
       </template>
+      </router-link>
 
 
       <template v-if="expanded && post.comments.length > 0">
         <v-divider></v-divider>
-        <v-list-item v-for="comment in post.comments.slice().reverse()" :key="comment.timeStamp">
+        <v-list-item v-for="comment in post.comments" :key="comment.timeStamp.nanoseconds">
           <v-list-item-avatar class="align-self-start mt-4">
             <img :src="comment.commentAuthor.photoUrl" alt="">
           </v-list-item-avatar>
