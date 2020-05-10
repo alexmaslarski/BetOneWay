@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import { db, auth } from '@/helpers/firebaseConfig'
 import { firestoreAction } from 'vuexfire'
-import firebase from 'firebase/app'
+// import firebase from 'firebase/app'
 import 'firebase/firestore'
 import router from '@/router/index'
 const state = {
@@ -103,24 +103,6 @@ const actions = {
         conclusion,
         profit
       }
-      let post = {
-        author: {
-          name: auth.currentUser.displayName,
-          userID: userID,
-          email: auth.currentUser.email,
-          photoUrl: auth.currentUser.photoURL
-        },
-        bet,
-        comments: {},
-        commentCount: 0,
-        likes: 0,
-        likedBy: []
-      }
-      console.log(post);
-      
-      db.collection('users').doc(userID).update({
-        posts: firebase.firestore.FieldValue.arrayUnion(post)
-      })
       db.collection('posts').add({
         author: {
           name: auth.currentUser.displayName,

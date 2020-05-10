@@ -19,17 +19,12 @@
     </v-list-item>
   </v-list>
   <v-divider></v-divider>
-  <app-bet-slip></app-bet-slip>
 </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
-import BetSlip from '../BetSlip/BetSlipListing'
 export default {
-  components: {
-    'app-bet-slip': BetSlip
-  },
   data() {
     return {
       user: null

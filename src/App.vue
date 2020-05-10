@@ -7,7 +7,7 @@
       elevate-on-scroll
       clipped-left
     >
-      <v-btn icon to="/profile">
+      <v-btn icon @click="drawer = true">
         <v-avatar v-if="getUser" size="25">
           <img :src="getUser.photoURL" alt="">
         </v-avatar>
@@ -21,6 +21,25 @@
           <v-icon>mdi-bell-outline</v-icon>
       </v-btn>
     </v-app-bar>
+
+    <v-navigation-drawer
+    app
+    v-model="drawer"
+    clipped
+    left
+    >
+    <app-nav-drawer-content v-if="getUser"></app-nav-drawer-content>
+      <div class="pa-4" v-else>
+        <v-card-title class="pl-0">Log in</v-card-title>
+      <v-btn to="/signin/login" block color="success" class="mb-3">Log in</v-btn>
+      <v-btn to="/signin/signup" block color="secondary lighten-1 secondary--text">Sign up</v-btn>
+      </div>
+      <template v-if="getUser" v-slot:append>
+        <div class="pa-2">
+          <v-btn @click='logOut' block>Logout</v-btn>
+        </div>
+      </template>
+    </v-navigation-drawer>
 
     <!-- Content -->
     <v-content>
@@ -63,16 +82,19 @@ import Vue from 'vue';
 import { mapGetters } from 'vuex';
 import firebase from "firebase";
 import BetSlip from '@/components/BetSlip/BetSlipListing'
+import NavDrawer from './components/UI/NavigationDrawer.vue'
 import { SwipeableBottomSheet } from "vue-swipeable-bottom-sheet";
 export default {
   name: 'App',
   components: {
+    'app-nav-drawer-content': NavDrawer,
     'app-bet-slip': BetSlip,
     SwipeableBottomSheet
   },
   data () {
     return {
-      isBetSlipOpen: 'close'
+      isBetSlipOpen: 'close',
+      drawer: false
     }
   },
   mounted () {

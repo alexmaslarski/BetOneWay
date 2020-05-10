@@ -1,10 +1,12 @@
 <template>
+<v-container>
   <v-card>
     <v-card-title>
-      Get into the action!
+      Log in to get all features!
     </v-card-title>
     <router-view></router-view>
   </v-card>
+</v-container>
 </template>
 
 <script>

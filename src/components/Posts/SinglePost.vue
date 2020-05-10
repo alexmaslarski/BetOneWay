@@ -1,13 +1,19 @@
 <template>
     <v-card :class="[expanded ? 'margin-bottom' : 'mb-3']">
         <v-list-item two-line>
+        <router-link :to="{ name: 'Profile', params: { id: post.author.userID }}" tag="div">
         <v-list-item-avatar>
           <img :src="post.author.photoUrl" alt="">
         </v-list-item-avatar>
+        </router-link>
         <v-list-item-content>
+          <router-link :to="{ name: 'Profile', params: { id: post.author.userID }}" tag="div">
           <v-list-item-title>{{post.author.name}}</v-list-item-title>
+          </router-link>
           <v-list-item-subtitle>{{post.bet.timeStamp.toDate() | moment("from", "now")}}</v-list-item-subtitle>
         </v-list-item-content>
+        
+        
         <div>
             <v-chip small v-if="post.bet.selection.length > 1" class="font-weight-medium" color="accent">COMBO</v-chip>
             <v-chip small v-if="post.bet.live" class="font-weight-medium ml-1" color="error">LIVE</v-chip>
@@ -60,6 +66,7 @@
             depressed
             class="primary justify-self-end"
             :class="[isLiked ? 'primary white--text' : 'secondary lighten-1 primary--text']"
+            :disabled="!user"
             >
               <v-icon>mdi-thumb-up-outline</v-icon>
             </v-btn>
@@ -93,7 +100,7 @@
 
 
 
-      <template>
+      <template v-if="user">
         <v-divider></v-divider>
         <v-list-item :class="{'comment-fixed' : expanded}">
           <v-list-item-content>
@@ -135,7 +142,7 @@ props: {
     isLiked () {
       let likesArray = this.post.likedBy
       let isLiked = false
-      if(likesArray.length > 0 && likesArray) {
+      if(this.user && likesArray && likesArray.length > 0) {
         for (var i in likesArray) {
           if (likesArray[i] == this.user.uid){
             isLiked = true;
