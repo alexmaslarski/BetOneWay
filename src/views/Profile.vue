@@ -62,13 +62,14 @@
          <v-card class="mt-3">
            <v-list-item v-if="getProfilePosts && getProfilePosts.length > 0">
              <v-row class="ma-0">
-               <v-col class="pa-0 align-center d-flex">
+               <v-col cols="4" class="pa-0 align-center d-flex">
                 <v-list-item-subtitle>Last 5 tips</v-list-item-subtitle>
                </v-col>
                <v-col class="justify-end text-right pa-0">
                <v-chip
                class="ml-1"
                label
+               small
                v-for="post in getProfilePosts.slice().reverse().slice(0, 5)"
                :key="post.postID"
                :color="post.bet.conclusion === 'Lost' ? 'error' : 'success'"

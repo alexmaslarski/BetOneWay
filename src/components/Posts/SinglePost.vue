@@ -39,7 +39,14 @@
         </v-list-item>
       </template>
         
-
+      <template v-if="post.bet.analysis.length > 0">
+        <v-btn v-if="!expanded" small text retain-focus-on-click block>Click to see analysis</v-btn>
+        <v-list-item v-else>
+          <v-list-item-content class="pb-0">
+            <p class="mb-0 body-2">{{post.bet.analysis}}</p>
+          </v-list-item-content>
+        </v-list-item>
+      </template>
 
       <template>
         <v-list-item class="py-3">

@@ -1,5 +1,6 @@
 <template>
   <v-container>
+      <v-card-subtitle class="px-0 pt-0"><app-back></app-back></v-card-subtitle>
       <app-post v-if="post" :post="post" :expanded="true"></app-post>
   </v-container>
 </template>
