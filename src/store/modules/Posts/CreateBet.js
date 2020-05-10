@@ -77,6 +77,14 @@ const actions = {
       let live = false;
       let combo;
       let conclusion = concludeBet(totalOdd);
+      let profit
+
+      if(conclusion === 'Won') {
+        profit = totalOdd * stake
+      }else {
+        profit = -stake
+      }
+
       state.betslip.length > 1 ? combo = true : combo = false;
       state.betslip.forEach(event => {
         if(event.in_play){
@@ -92,7 +100,8 @@ const actions = {
         paid,
         live,
         combo,
-        conclusion
+        conclusion,
+        profit
       }
       let post = {
         author: {

@@ -11,8 +11,13 @@
             <v-card-title class="pa-0">{{ getProfile.name }} {{id}}</v-card-title>
             <v-list-item-subtitle class="mb-4" v-if="getFollowers" ><v-icon size="16">mdi-account-group</v-icon> {{getFollowers.length}} followers</v-list-item-subtitle>
             <div class="d-flex">
-            <v-btn @click="logOut" small rounded color="success" class="mr-2">Following</v-btn>
-            <v-btn small rounded color="primary darken-1">$59.99</v-btn>
+            <v-btn @click="handleFollow" small rounded class="mr-2"
+            :class="[isFollowed ? 'success' : 'primary']"
+            >{{isFollowed ? 'Following' : 'Follow'}}</v-btn>
+            <v-btn @click="handleSubscribe" small rounded class="mr-2"
+            :class="[isSubscribed ? 'secondary lighten-1 secondary--text' : 'primary darken-2']"
+            >{{isSubscribed ? 'Subscribed' : '$59.99'}}</v-btn>
+            <!-- <v-btn @click="logOut" small rounded color="primary darken-1">$59.99</v-btn> -->
             </div>
           </v-list-item-content>
         </v-list-item>
@@ -48,7 +53,54 @@
       </v-card>
       <v-tabs-items class="secondary lighten-1" v-model="tab">
         <v-tab-item>
+          <v-container>
+         <v-card class="mt-3">
+           <v-list-item>
+             <v-row class="ma-0">
+               <v-col class="pa-0 align-center d-flex">
+                <v-list-item-subtitle>Last 5 tips</v-list-item-subtitle>
+               </v-col>
+               <v-col class="justify-end text-right pa-0">
+               <v-chip
+               class="ml-1"
+               label
+               v-for="post in getProfilePosts.slice().reverse().slice(0, 5)"
+               :key="post.postID"
+               :color="post.bet.conclusion === 'Lost' ? 'error' : 'success'"
+               >
+               {{post.bet.conclusion === 'Lost' ? 'L' : 'W'}}</v-chip>
+               </v-col>
+             </v-row>
+           </v-list-item>
+         </v-card>
          
+           <v-row class="px-2 mt-2">
+             <v-col cols="6" class="pa-1">
+               <v-card class="text-center py-6 px-2">
+                 <v-list-item-subtitle class="secondary--text font-weight-medium">Profit</v-list-item-subtitle>
+                 <v-list-item-title class="title">{{getProfit}}u</v-list-item-title>
+               </v-card>
+             </v-col>
+             <v-col cols="6" class="pa-1">
+               <v-card class="text-center py-6 px-2">
+                 <v-list-item-subtitle class="secondary--text font-weight-medium">Yield</v-list-item-subtitle>
+                 <v-list-item-title class="title">{{getYield}}%</v-list-item-title>
+               </v-card>
+             </v-col>
+             <v-col cols="6" class="pa-1">
+               <v-card class="text-center py-6 px-2">
+                 <v-list-item-subtitle class="secondary--text font-weight-medium">Avg. odds</v-list-item-subtitle>
+                 <v-list-item-title class="title">{{getAvgOdd}}</v-list-item-title>
+               </v-card>
+             </v-col>
+             <v-col cols="6" class="pa-1">
+               <v-card class="text-center py-6 px-2">
+                 <v-list-item-subtitle class="secondary--text font-weight-medium">Avg. Stake</v-list-item-subtitle>
+                 <v-list-item-title class="title">{{getAvgStake}} / 10</v-list-item-title>
+               </v-card>
+             </v-col>
+           </v-row>
+          </v-container>
         </v-tab-item>
         <v-tab-item>
           <v-container>
@@ -132,6 +184,28 @@ export default {
     };
   },
   computed: {
+    isFollowed () {
+      let isFollowed = false
+      if(this.getFollowers.length > 0 && this.getFollowers) {
+        for (var i in this.getFollowers) {
+          if (this.getFollowers[i] == this.getUser.uid){
+            isFollowed = true;
+          }
+        }
+      }
+      return isFollowed;
+    },
+    isSubscribed () {
+      let isSubscribed = false
+      if(this.getSubscribers.length > 0 && this.getSubscribers) {
+        for (var i in this.getSubscribers) {
+          if (this.getSubscribers[i] == this.getUser.uid){
+            isSubscribed = true;
+          }
+        }
+      }
+      return isSubscribed;
+    },
     ...mapGetters([
       'getUser',
       'getProfile',
@@ -143,6 +217,10 @@ export default {
       'getAvgRating',
       'getProfilePosts',
       'getBetHistory',
+      'getProfit',
+      'getYield',
+      'getAvgOdd',
+      'getAvgStake'
     ])
   },
   watch: {
@@ -172,11 +250,19 @@ export default {
     this.$store.dispatch('bindProfileInfo', this.userID)
     },
     handleFollow: function() {
-      let userID = this.userID;
+      let userID = this.getProfile.id;
       if(this.isFollowed){
-        this.$store.dispatch('followUser', userID)
-      }else {
         this.$store.dispatch('unfollowUser', userID)
+      }else {
+        this.$store.dispatch('followUser', userID)
+      }
+    },
+    handleSubscribe: function() {
+      let userID = this.getProfile.id;
+      if(this.isSubscribed){
+        this.$store.dispatch('unsubscribe', userID)
+      }else {
+        this.$store.dispatch('subscribe', userID)
       }
     }
   },

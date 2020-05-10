@@ -29,14 +29,24 @@ const getters = {
     return state.profileInfo.rating
   },
   getAvgRating: state => {
-    let totalRating = null;
+    let avgRating = 0;
     if(state.profileInfo.rating.length > 0) {
       state.profileInfo.rating.forEach(rating => {
-        totalRating += rating.rate
+        avgRating += rating.rate
       });
-      totalRating / state.profileInfo.rating.length;
+      avgRating = avgRating / state.profileInfo.rating.length;
     }
-    return totalRating
+    return avgRating
+  },
+  getAvgOdd: (state, getters) => {
+    let avgOdd = 0;
+    getters.getBetHistory.forEach(bet => {
+      avgOdd += parseFloat(bet.totalOdd)
+    });
+    console.log(avgOdd);
+    
+    avgOdd = avgOdd / getters.getBetHistory.length;
+    return avgOdd.toFixed(2)
   },
   getProfilePosts: state => {
     return state.profilePosts
@@ -47,6 +57,28 @@ const getters = {
       betHistory.push(post.bet)
     });
       return betHistory;
+  },
+  getProfit: (state, getters) => {
+    let profit = 0;
+    getters.getBetHistory.forEach(bet => {
+      profit += bet.profit
+    });
+    return profit
+  },
+  getTotalStake: (state, getters) => {
+    let stake = 0;
+    getters.getBetHistory.forEach(bet => {
+      stake += bet.stake
+    });
+    return stake
+  },
+  getAvgStake: (state, getters) => {
+    return (getters.getTotalStake / getters.getBetHistory.length).toFixed(2)
+  },
+  getYield: (state, getters) => {
+    let getYield = 0
+    getYield = (getters.getProfit / getters.getTotalStake) * 100
+    return getYield.toFixed(2)
   }
 }
 
@@ -58,24 +90,58 @@ const actions = {
   followUser: firestoreAction((context, payload) => {
     let userID = payload;
     let followedBy = auth.currentUser.uid
+    console.log(userID);
+    console.log(followedBy);
+    
     if(userID !== followedBy) {
-      db.collection('user').doc(userID).update({
+      db.collection('users').doc(userID).update({
         followers: firebase.firestore.FieldValue.arrayUnion(followedBy)
       })
-      db.collection('user').doc(followedBy).update({
+      db.collection('users').doc(followedBy).update({
         following: firebase.firestore.FieldValue.arrayUnion(userID)
       })
     }
   }),
   unfollowUser: firestoreAction((context, payload) => {
+    console.log(payload);
+    
     let userID = payload;
     let followedBy = auth.currentUser.uid
     if(userID !== followedBy) {
-      db.collection('user').doc(userID).update({
+      db.collection('users').doc(userID).update({
         followers: firebase.firestore.FieldValue.arrayRemove(followedBy)
       })
-      db.collection('user').doc(followedBy).update({
+      db.collection('users').doc(followedBy).update({
         following: firebase.firestore.FieldValue.arrayRemove(userID)
+      })
+    }
+  }),
+  subscribe: firestoreAction((context, payload) => {
+    let userID = payload;
+    let subscribedBy = auth.currentUser.uid
+    console.log('subscribe');
+    
+    if(userID !== subscribedBy) {
+      db.collection('users').doc(userID).update({
+        subscribers: firebase.firestore.FieldValue.arrayUnion(subscribedBy)
+      })
+      db.collection('users').doc(subscribedBy).update({
+        subscribedTo: firebase.firestore.FieldValue.arrayUnion(userID)
+      })
+    }
+  }),
+  unsubscribe: firestoreAction((context, payload) => {
+    console.log(payload);
+    console.log('unsubscribe');
+    
+    let userID = payload;
+    let subscribedBy = auth.currentUser.uid
+    if(userID !== subscribedBy) {
+      db.collection('users').doc(userID).update({
+        subscribers: firebase.firestore.FieldValue.arrayRemove(subscribedBy)
+      })
+      db.collection('users').doc(subscribedBy).update({
+        subscribedTo: firebase.firestore.FieldValue.arrayRemove(userID)
       })
     }
   })
