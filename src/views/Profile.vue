@@ -9,7 +9,7 @@
           </v-list-item-avatar>
           <v-list-item-content>
             <v-card-title class="pa-0">{{ getProfile.name }} {{id}}</v-card-title>
-            <v-list-item-subtitle class="mb-4"><v-icon size="16">mdi-account-group</v-icon>{{getFollowers.length}}followers</v-list-item-subtitle>
+            <v-list-item-subtitle class="mb-4" v-if="getFollowers" ><v-icon size="16">mdi-account-group</v-icon> {{getFollowers.length}} followers</v-list-item-subtitle>
             <div class="d-flex">
             <v-btn @click="logOut" small rounded color="success" class="mr-2">Following</v-btn>
             <v-btn small rounded color="primary darken-1">$59.99</v-btn>
@@ -23,10 +23,10 @@
               <p class="mb-0">{{getAvgRating}}</p>
               <v-rating color="secondary" readonly x-small :value="getAvgRating" length="5" half-increments dense></v-rating>
             </div>
-            <p class="caption">{{getRating.length}} ratings</p>
+            <p class="caption" v-if="getRating">{{getRating.length}} ratings</p>
             </v-col>
             <v-col>
-              <p class="mb-0">358</p>
+              <p class="mb-0" v-if="getProfilePosts">{{getProfilePosts.length}}</p>
               <p class="caption">Tips</p>
             </v-col>
             <v-col>
@@ -47,30 +47,13 @@
         </v-tabs>
       </v-card>
       <v-tabs-items class="secondary lighten-1" v-model="tab">
-        <!-- <v-tab-item>
-          <v-expansion-panel
-          v-for="betGroup in getBetHistory"
-          :key="betGroup.timeStamp.seconds"
-          >
-            <v-expansion-panel-header>
-              {{ betGroup.timeStamp.toDate() | moment("DD MMMM, HH:mm") }}
-            </v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <v-container
-              fluid
-              class="py-0"
-              >
-              <v-list>
-                <app-bet-history-item v-for="betEvent in betGroup.selection" :key="betEvent.pointer" :event="betEvent"></app-bet-history-item>
-              </v-list>
-
-              </v-container>
-            </v-expansion-panel-content>
-
-          </v-expansion-panel>
-        </v-tab-item> -->
         <v-tab-item>
-          <h2>Tab 2</h2>
+         
+        </v-tab-item>
+        <v-tab-item>
+          <v-container>
+          <app-post v-for="post in getProfilePosts" :key="post.id" :post="post"></app-post>
+          </v-container>
         </v-tab-item>
         <v-tab-item>
           <h2>Tab 3</h2>
@@ -128,10 +111,12 @@
 import Vue from 'vue';
 import firebase from "firebase";
 import { mapGetters } from 'vuex';
+import SinglePost from '@/components/Posts/SinglePost.vue';
 // import BetHistoryItem from '@/components/Profile/BetHistoryItem'
 export default {
   name: 'Profile',
   components: {
+    'app-post': SinglePost
   // 'app-bet-history-item': BetHistoryItem
   },
   props: {

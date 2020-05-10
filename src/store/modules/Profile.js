@@ -29,11 +29,13 @@ const getters = {
     return state.profileInfo.rating
   },
   getAvgRating: state => {
-    let totalRating = 0;
-    state.profileInfo.rating.forEach(rating => {
-      totalRating += rating.rate
-    });
-    totalRating / state.profileInfo.rating.length;
+    let totalRating = null;
+    if(state.profileInfo.rating.length > 0) {
+      state.profileInfo.rating.forEach(rating => {
+        totalRating += rating.rate
+      });
+      totalRating / state.profileInfo.rating.length;
+    }
     return totalRating
   },
   getProfilePosts: state => {

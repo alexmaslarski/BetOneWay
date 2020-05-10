@@ -57,6 +57,16 @@ const actions = {
     }
   },
   placeBet: firestoreAction(({ state, dispatch }, payload) => {
+    function concludeBet (totalOdd) {
+      let rand = Math.random() * (totalOdd - 0) + 0;
+      console.log(rand);
+      
+      if(rand <= 1) {
+        return 'Won'
+      }else {
+        return 'Lost'
+      }
+    }
     if(auth.currentUser){
       let userID = auth.currentUser.uid;
       let timeStamp = new Date();
@@ -66,6 +76,7 @@ const actions = {
       let paid = payload.paid;
       let live = false;
       let combo;
+      let conclusion = concludeBet(totalOdd);
       state.betslip.length > 1 ? combo = true : combo = false;
       state.betslip.forEach(event => {
         if(event.in_play){
@@ -80,7 +91,8 @@ const actions = {
         analysis,
         paid,
         live,
-        combo
+        combo,
+        conclusion
       }
       let post = {
         author: {
@@ -101,7 +113,17 @@ const actions = {
         posts: firebase.firestore.FieldValue.arrayUnion(post)
       })
       db.collection('posts').add({
-        post
+        author: {
+          name: auth.currentUser.displayName,
+          userID: userID,
+          email: auth.currentUser.email,
+          photoUrl: auth.currentUser.photoURL
+        },
+        bet,
+        comments: {},
+        commentCount: 0,
+        likes: 0,
+        likedBy: []
       })
       .then((docRef) => {
         db.collection('posts').doc(docRef.id).update({
