@@ -2,6 +2,7 @@ import { db, auth } from '@/helpers/firebaseConfig'
 import { firestoreAction } from 'vuexfire'
 import 'firebase/firestore'
 import firebase from 'firebase/app'
+import store from '..'
 const state = {
   profileInfo: [],
   profilePosts: []
@@ -12,6 +13,9 @@ const mutations = {
 const getters = {
   getProfile: state => {
     return state.profileInfo;
+  },
+  getBio: state => {
+    return state.profileInfo.bio;
   },
   getFollowers: state => {
     return state.profileInfo.followers
@@ -36,7 +40,7 @@ const getters = {
       });
       avgRating = avgRating / state.profileInfo.rating.length;
     }
-    return avgRating
+    return parseFloat(avgRating).toFixed(1)
   },
   getAvgOdd: (state, getters) => {
     let avgOdd = 0;
@@ -113,8 +117,6 @@ const actions = {
     }
   }),
   unfollowUser: firestoreAction((context, payload) => {
-    console.log(payload);
-    
     let userID = payload;
     let followedBy = auth.currentUser.uid
     if(userID !== followedBy) {
@@ -129,8 +131,6 @@ const actions = {
   subscribe: firestoreAction((context, payload) => {
     let userID = payload;
     let subscribedBy = auth.currentUser.uid
-    console.log('subscribe');
-    
     if(userID !== subscribedBy) {
       db.collection('users').doc(userID).update({
         subscribers: firebase.firestore.FieldValue.arrayUnion(subscribedBy)
@@ -142,8 +142,6 @@ const actions = {
   }),
   unsubscribe: firestoreAction((context, payload) => {
     console.log(payload);
-    console.log('unsubscribe');
-    
     let userID = payload;
     let subscribedBy = auth.currentUser.uid
     if(userID !== subscribedBy) {
@@ -154,6 +152,40 @@ const actions = {
         subscribedTo: firebase.firestore.FieldValue.arrayRemove(userID)
       })
     }
+  }),
+  updateBio: firestoreAction((context, payload) => {
+    let userID = store.getters.getUser.uid
+    db.collection('users').doc(userID).update({
+      bio: payload
+    })
+  }),
+  submitRating: firestoreAction((context, payload) => {
+    let userID = payload.userID
+    let ratedBy = store.getters.getUser.uid
+    let rating = {
+      rate: payload.rate,
+      ratedBy
+    }
+    console.log(rating);
+    let ratingArray
+    db.collection('users').doc(userID).get().then(snap => {
+      ratingArray = snap.data().rating
+      let index = ratingArray.findIndex(function( rating ) {
+        return rating.ratedBy === ratedBy;
+      });
+      if(index >=0) {
+        ratingArray[index] = rating
+      }else {
+        ratingArray.push(rating)
+      }
+      console.log(ratingArray);
+      console.log(index);
+      
+    }).finally(() => {
+      db.collection('users').doc(userID).update({
+        rating: ratingArray
+      })
+    })
   })
 }
 export default {

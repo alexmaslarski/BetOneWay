@@ -1,23 +1,28 @@
 <template>
     <div class="profile">
       <v-card tile>
+        <div class="d-flex justify-space-between">
         <v-card-subtitle><app-back></app-back></v-card-subtitle>
+        <v-card-subtitle @click="dialog = true" v-if="getUser.uid === getProfile.id"><v-icon>mdi-pencil</v-icon></v-card-subtitle>
+        </div>
         <v-list>
         <v-list-item>
           <v-list-item-avatar size="75" class="align-self-start mt-5">
             <img :src="getProfile.photoUrl" alt="">
           </v-list-item-avatar>
           <v-list-item-content>
-            <v-card-title class="pa-0">{{ getProfile.name }} {{id}}</v-card-title>
+            <v-card-title class="pa-0">{{ getProfile.name }}</v-card-title>
             <v-list-item-subtitle class="mb-4" v-if="getFollowers" ><v-icon size="16">mdi-account-group</v-icon> {{getFollowers.length}} followers</v-list-item-subtitle>
             <div class="d-flex">
+
             <v-btn @click="handleFollow" small rounded class="mr-2"
             :class="[isFollowed ? 'success' : 'primary']"
             >{{isFollowed ? 'Following' : 'Follow'}}</v-btn>
+
             <v-btn @click="handleSubscribe" small rounded class="mr-2"
-            :class="[isSubscribed ? 'secondary lighten-1 secondary--text' : 'primary darken-2']"
+            :class="[isSubscribed ? 'secondary lighten-1 secondary--text' : 'primary darken-1']"
             >{{isSubscribed ? 'Subscribed' : '$59.99'}}</v-btn>
-            <!-- <v-btn @click="logOut" small rounded color="primary darken-1">$59.99</v-btn> -->
+
             </div>
           </v-list-item-content>
         </v-list-item>
@@ -26,7 +31,7 @@
             <v-col>
               <div class="rating d-flex">
               <p class="mb-0">{{getAvgRating ? getAvgRating : 'No rating'}}</p>
-              <v-rating v-if="getAvgRating" color="secondary" readonly x-small :value="getAvgRating" length="5" half-increments dense></v-rating>
+              <v-rating v-if="getAvgRating" color="secondary" background-color="secondary lighten-1" readonly small :value="parseFloat(getAvgRating)" length="5" half-increments dense></v-rating>
             </div>
             <p class="caption" v-if="getRating">{{getRating.length}} ratings</p>
             </v-col>
@@ -46,13 +51,13 @@
         </v-list-item>
         </v-list>
         <v-tabs color="success" centered grow class="px-4" v-model="tab">
-          <v-tab>Statistics</v-tab>
-          <v-tab>Feed</v-tab>
+          <v-tab :disabled="!getProfilePosts || !getProfilePosts.length > 0">Statistics</v-tab>
+          <v-tab :disabled="!getProfilePosts || !getProfilePosts.length > 0">Feed</v-tab>
           <v-tab>About</v-tab>
         </v-tabs>
       </v-card>
       <v-tabs-items class="secondary lighten-1" v-model="tab">
-        <v-tab-item>
+        <v-tab-item :disabled="!getProfilePosts || !getProfilePosts.length > 0">
           <v-container>
          <v-card class="mt-3">
            <v-list-item v-if="getProfilePosts && getProfilePosts.length > 0">
@@ -102,15 +107,44 @@
            </v-row>
           </v-container>
         </v-tab-item>
-        <v-tab-item>
+
+        <v-tab-item :disabled="!getProfilePosts || !getProfilePosts.length > 0">
           <v-container>
           <app-post v-for="post in getProfilePosts" :key="post.id" :post="post"></app-post>
           </v-container>
         </v-tab-item>
+
         <v-tab-item>
-          <h2>Tab 3</h2>
+          <v-container>
+            <v-card class="mb-3">
+              <v-card-title class="justify-center"><span>Rate Me</span></v-card-title>
+              <v-card-text class="text-center">
+              <v-rating @input="submitRating" v-model="newRating" x-large color="accent" background-color="secondary" length="5" half-increments dense></v-rating>
+              </v-card-text>
+            </v-card>
+            <v-card v-if="getBio">
+              <v-card-title>About Me</v-card-title>
+              <v-card-text>
+                {{getBio}}
+              </v-card-text>
+            </v-card>
+          </v-container>
         </v-tab-item>
       </v-tabs-items>
+
+      <v-dialog v-model="dialog">
+        <v-card>
+          <v-card-title>Update Bio</v-card-title>
+          <v-card-text>
+            <v-textarea no-resize autoGrow v-model="bioText"></v-textarea>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
+            <v-btn color="blue darken-1" text @click="updateBio">Save</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </div>
 </template>
 
@@ -135,7 +169,10 @@ export default {
   data() {
     return {
       userID: this.id,
-      tab: null
+      tab: null,
+      dialog: false,
+      bioText: '',
+      newRating: 0
     };
   },
   computed: {
@@ -164,6 +201,7 @@ export default {
     ...mapGetters([
       'getUser',
       'getProfile',
+      'getBio',
       'getFollowers',
       'getFollowing',
       'getSubscribers',
@@ -197,6 +235,20 @@ export default {
         type: 'info',
         dismissible: true
       });
+    },
+    updateBio() {
+    this.$store.dispatch('updateBio', this.bioText)
+    this.dialog = false;
+    this.bioText = '';
+    },
+    submitRating() {
+      console.log('rate');
+      
+      let rating = {
+        rate: this.newRating,
+        userID: this.getProfile.id
+      }
+    this.$store.dispatch('submitRating', rating)
     },
     updateUserProfile() {
     if(this.userID === ''){
