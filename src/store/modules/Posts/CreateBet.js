@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import { db, auth } from '@/helpers/firebaseConfig'
 import { firestoreAction } from 'vuexfire'
-// import firebase from 'firebase/app'
+import firebase from 'firebase/app'
 import 'firebase/firestore'
 import router from '@/router/index'
 const state = {
@@ -59,8 +59,6 @@ const actions = {
   placeBet: firestoreAction(({ state, dispatch }, payload) => {
     function concludeBet (totalOdd) {
       let rand = Math.random() * (totalOdd - 0) + 0;
-      console.log(rand);
-      
       if(rand <= 1) {
         return 'Won'
       }else {
@@ -103,22 +101,62 @@ const actions = {
         conclusion,
         profit
       }
-      db.collection('posts').add({
-        author: {
-          name: auth.currentUser.displayName,
-          userID: userID,
-          email: auth.currentUser.email,
-          photoUrl: auth.currentUser.photoURL
-        },
-        bet,
-        comments: {},
-        commentCount: 0,
-        likes: 0,
-        likedBy: []
-      })
-      .then((docRef) => {
-        db.collection('posts').doc(docRef.id).update({
-          postID: docRef.id
+      var userRef = db.collection('users').doc(userID);
+      // var postRef = db.collection('posts');
+
+      db.runTransaction(transaction => {
+        return transaction.get(userRef).then(res => {
+            if (!res.exists) {
+                throw "Document does not exist!";
+            }
+            // total Posts
+            console.log(res.data().posts);
+            
+            let totalPosts = res.data().posts.length + 1;
+            // total Profit
+            let totalProfit = res.data().totalProfit + profit;
+
+            // total Odd
+            let totalOdds = res.data().totalOdds + parseFloat(totalOdd)
+            // total stake
+            let totalStake = res.data().totalStake + stake;
+
+            let newAvgOdds = totalOdds / totalPosts;
+            let newAvgStake = totalStake / totalPosts
+            let newYield = (totalProfit / totalStake) * 100;
+
+
+            // Commit to Firestore
+            transaction.update(userRef, {
+                yield: newYield,
+                totalStake,
+                avgStake: newAvgStake,
+                totalProfit,
+                totalOdds,
+                avgOdds: newAvgOdds
+            });
+        })
+      }).then(() => {
+        db.collection('posts').add({
+          author: {
+            name: auth.currentUser.displayName,
+            userID: userID,
+            email: auth.currentUser.email,
+            photoUrl: auth.currentUser.photoURL
+          },
+          bet,
+          comments: {},
+          commentCount: 0,
+          likes: 0,
+          likedBy: []
+        })
+        .then((docRef) => {
+          db.collection('posts').doc(docRef.id).update({
+            postID: docRef.id
+          })
+          db.collection('users').doc(userID).update({
+            posts: firebase.firestore.FieldValue.arrayUnion(docRef)
+          })
         })
       })
   

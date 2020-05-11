@@ -12,13 +12,13 @@ import 'swiper/css/swiper.css'
 import BackBtn from '@/components/UI/backButton.vue';
 import MarqueeText from 'vue-marquee-text-component'
 
-axios.defaults.baseURL = 'https://sports-odds-betapi.p.rapidapi.com/v1';
-axios.defaults.headers.get['x-rapidapi-host'] = 'sports-odds-betapi.p.rapidapi.com';
-axios.defaults.headers.get['x-rapidapi-key'] = '6b3ce1bfcbmshb35345471eebde8p1de987jsnbffb71c8741d';
-axios.defaults.headers.get['package'] = '4a788ec11cd42226e2fdcbd62253379c';
-
-// axios.defaults.baseURL = 'https://odds.incub.space/v1';
-// axios.defaults.headers.get['package'] = 'test_2day_cd42226e2fdcbd62253379c';
+// axios.defaults.baseURL = 'https://sports-odds-betapi.p.rapidapi.com/v1';
+// axios.defaults.headers.get['x-rapidapi-host'] = 'sports-odds-betapi.p.rapidapi.com';
+// axios.defaults.headers.get['x-rapidapi-key'] = '6b3ce1bfcbmshb35345471eebde8p1de987jsnbffb71c8741d';
+// axios.defaults.headers.get['package'] = '4a788ec11cd42226e2fdcbd62253379c';
+// https://betdta.com
+axios.defaults.baseURL = 'https://betdta.com/v1';
+axios.defaults.headers.get['package'] = '655a50942823a0f022c2585000c71025';
 
 
 Vue.component('app-back', BackBtn);

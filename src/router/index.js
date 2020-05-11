@@ -14,6 +14,7 @@ import Profile from '@/views/Profile.vue'
 import SignIn from '@/views/SignIn.vue'
 import Login from '@/components/Login.vue'
 import Register from '@/components/Register.vue'
+import Tipsters from '@/views/Tipsters/Tipsters.vue'
 
 Vue.use(VueRouter)
 
@@ -107,6 +108,11 @@ Vue.use(VueRouter)
     path: '/activity',
     name: 'Activity',
     component: Activity
+  },
+  {
+    path: '/tipsters',
+    name: 'Tipsters',
+    component: Tipsters
   }
 ]
 

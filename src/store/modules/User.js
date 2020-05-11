@@ -2,6 +2,7 @@ import Vue from 'vue';
 import { db } from '@/helpers/firebaseConfig'
 import firebase from 'firebase/app'
 import 'firebase/firestore'
+import { firestoreAction } from 'vuexfire'
 const state = {
   user: null,
   userLoaded: false
@@ -24,12 +25,7 @@ const actions = {
     firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
       .then(
         authResult => {
-          let docRef = db.collection('users').doc(authResult.user.uid);
-          docRef.get().then(function(){
-              db.collection('users').doc(authResult.user.uid).update({
-                lastSignIn: authResult.user.metadata.lastSignInTime
-              })
-          })
+          dispatch('createUserInDB', authResult)
           dispatch('updateUser', authResult)
         }
       )
@@ -49,13 +45,7 @@ const actions = {
     firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
       .then(
         authResult => {
-          db.collection('users').doc(authResult.user.uid).set({
-            name: authResult.user.displayName,
-            id: authResult.user.uid,
-            photoUrl: authResult.user.photoURL,
-            accountCreated: authResult.user.metadata.creationTime,
-            lastSignIn: authResult.user.metadata.lastSignInTime,
-          })
+          dispatch('updateExistingUser', authResult)
           dispatch('updateUser', authResult)
         }
       )
@@ -73,8 +63,35 @@ const actions = {
   },
   updateUser: ({commit}, user) => {
     commit('UPDATE_USER', user);
-    console.log('updateUser');
-  }
+  },
+  updateExistingUser: firestoreAction((context, payload) => {
+    db.collection('users').doc(payload.user.uid).update({
+      lastSignIn: payload.user.metadata.lastSignInTime
+    })
+  }),
+  createUserInDB: firestoreAction((context, payload) => {
+    db.collection('users').doc(payload.user.uid).set({
+      name: payload.user.displayName,
+      id: payload.user.uid,
+      photoUrl: payload.user.photoURL,
+      accountCreated: payload.user.metadata.creationTime,
+      lastSignIn: payload.user.metadata.lastSignInTime,
+      totalOdds: 0,
+      totalProfit: 0,
+      totalStake: 0,
+      yield: 0,
+      avgOdds: 0,
+      avgStake: 0,
+      avgRating: 0,
+      bio: '',
+      followers: [],
+      following: [],
+      subscribers: [],
+      subscribedTo: [],
+      posts: [],
+      rating: [],
+    })
+  })
 }
 export default {
   state,

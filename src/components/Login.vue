@@ -24,7 +24,6 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import { mapGetters } from 'vuex';
 import * as firebase from "firebase";
 import * as firebaseui from 'firebaseui'
@@ -56,38 +55,24 @@ export default {
   },
   mounted() {
     var uiConfig = {
-      callbacks: {
-        signInSuccessWithAuthResult(authResult){
-          Vue.$toast.open({
-            message: `Hello, ${authResult.user.displayName}!`,
-            position: 'bottom',
-            type: 'success',
-            dismissible: true
-          });
-          let docRef = db.collection('users').doc(authResult.user.uid);
-          docRef.get().then(function(doc){
-            if (doc.exists) {
-              db.collection('users').doc(authResult.user.uid).update({
-                lastSignIn: authResult.user.metadata.lastSignInTime
-              })
-            }else {
-              db.collection('users').doc(authResult.user.uid).set({
-                name: authResult.user.displayName,
-                id: authResult.user.uid,
-                photoUrl: authResult.user.photoURL,
-                accountCreated: authResult.user.metadata.creationTime,
-                lastSignIn: authResult.user.metadata.lastSignInTime,
-              })
-            }
-          })
-        }
-      },
       signInFlow: 'popup',
       signInOptions: [
         firebase.auth.GoogleAuthProvider.PROVIDER_ID,
         firebase.auth.EmailAuthProvider.PROVIDER_ID,
         firebase.auth.FacebookAuthProvider.PROVIDER_ID
-      ]
+      ],
+      callbacks: {
+        signInSuccessWithAuthResult: authResult => {
+          let docRef = db.collection('users').doc(authResult.user.uid);
+          docRef.get().then( doc => {
+            if (doc.exists) {
+              this.$store.dispatch('updateExistingUser', authResult)
+            }else {
+              this.$store.dispatch('createUserInDB', authResult)
+            }
+          })
+        }
+      }
     };
     let ui = firebaseui.auth.AuthUI.getInstance();
     if (!ui) {

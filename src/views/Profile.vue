@@ -51,12 +51,29 @@
         </v-list-item>
         </v-list>
         <v-tabs color="success" centered grow class="px-4" v-model="tab">
+          <v-tab>About</v-tab>
           <v-tab :disabled="!getProfilePosts || !getProfilePosts.length > 0">Statistics</v-tab>
           <v-tab :disabled="!getProfilePosts || !getProfilePosts.length > 0">Feed</v-tab>
-          <v-tab>About</v-tab>
         </v-tabs>
       </v-card>
       <v-tabs-items class="secondary lighten-1" v-model="tab">
+        <v-tab-item>
+          <v-container>
+            <v-card class="mb-3">
+              <v-card-title class="justify-center"><span>Rate Me</span></v-card-title>
+              <v-card-text class="text-center">
+              <v-rating @input="submitRating" v-model="newRating" x-large color="accent" background-color="secondary" length="5" half-increments dense></v-rating>
+              </v-card-text>
+            </v-card>
+            <v-card v-if="getBio">
+              <v-card-title>About Me</v-card-title>
+              <v-card-text>
+                {{getBio}}
+              </v-card-text>
+            </v-card>
+          </v-container>
+        </v-tab-item>
+
         <v-tab-item :disabled="!getProfilePosts || !getProfilePosts.length > 0">
           <v-container>
          <v-card class="mt-3">
@@ -112,23 +129,6 @@
         <v-tab-item :disabled="!getProfilePosts || !getProfilePosts.length > 0">
           <v-container>
           <app-post v-for="post in getProfilePosts" :key="post.id" :post="post"></app-post>
-          </v-container>
-        </v-tab-item>
-
-        <v-tab-item>
-          <v-container>
-            <v-card class="mb-3">
-              <v-card-title class="justify-center"><span>Rate Me</span></v-card-title>
-              <v-card-text class="text-center">
-              <v-rating @input="submitRating" v-model="newRating" x-large color="accent" background-color="secondary" length="5" half-increments dense></v-rating>
-              </v-card-text>
-            </v-card>
-            <v-card v-if="getBio">
-              <v-card-title>About Me</v-card-title>
-              <v-card-text>
-                {{getBio}}
-              </v-card-text>
-            </v-card>
           </v-container>
         </v-tab-item>
       </v-tabs-items>

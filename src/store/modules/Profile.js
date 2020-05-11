@@ -33,24 +33,10 @@ const getters = {
     return state.profileInfo.rating
   },
   getAvgRating: state => {
-    let avgRating = 0;
-    if(state.profileInfo.rating && state.profileInfo.rating.length > 0) {
-      state.profileInfo.rating.forEach(rating => {
-        avgRating += rating.rate
-      });
-      avgRating = avgRating / state.profileInfo.rating.length;
-    }
-    return parseFloat(avgRating).toFixed(1)
+    return state.profileInfo.avgRating
   },
-  getAvgOdd: (state, getters) => {
-    let avgOdd = 0;
-    if(getters.getBetHistory && getters.getBetHistory.length > 0){
-      getters.getBetHistory.forEach(bet => {
-        avgOdd += parseFloat(bet.totalOdd)
-      });
-      avgOdd = avgOdd / getters.getBetHistory.length;
-    }
-    return avgOdd.toFixed(2)
+  getAvgOdd: state => {
+    return state.profileInfo.avgOdds
   },
   getProfilePosts: state => {
     return state.profilePosts
@@ -64,35 +50,17 @@ const getters = {
     }
       return betHistory;
   },
-  getProfit: (state, getters) => {
-    let profit = 0;
-    if(getters.getBetHistory && getters.getBetHistory.length > 0){
-      getters.getBetHistory.forEach(bet => {
-        profit += bet.profit
-      });
-    }
-    return profit
+  getProfit: state => {
+    return state.profileInfo.totalProfit
   },
-  getTotalStake: (state, getters) => {
-    let stake = 0;
-    if(getters.getBetHistory && getters.getBetHistory.length > 0){
-    getters.getBetHistory.forEach(bet => {
-      stake += bet.stake
-    });
-  }
-    return stake
+  getTotalStake: state => {
+    return state.profileInfo.totalStake
   },
-  getAvgStake: (state, getters) => {
-    if(getters.getTotalStake && getters.getBetHistory && getters.getBetHistory.length){
-      return (getters.getTotalStake / getters.getBetHistory.length).toFixed(2)
-    }
+  getAvgStake: state => {
+    return state.profileInfo.avgStake
   },
-  getYield: (state, getters) => {
-    let getYield = 0
-    if(getters.getProfit && getters.getTotalStake){
-      getYield = (getters.getProfit / getters.getTotalStake) * 100
-    }
-    return getYield.toFixed(2)
+  getYield: state => {
+    return parseFloat(state.profileInfo.yield).toFixed(2)
   }
 }
 
@@ -168,22 +136,35 @@ const actions = {
     }
     console.log(rating);
     let ratingArray
-    db.collection('users').doc(userID).get().then(snap => {
-      ratingArray = snap.data().rating
-      let index = ratingArray.findIndex(function( rating ) {
-        return rating.ratedBy === ratedBy;
-      });
-      if(index >=0) {
-        ratingArray[index] = rating
-      }else {
-        ratingArray.push(rating)
-      }
-      console.log(ratingArray);
-      console.log(index);
-      
-    }).finally(() => {
-      db.collection('users').doc(userID).update({
-        rating: ratingArray
+    var userRef = db.collection('users').doc(userID);
+    db.runTransaction(transaction => {
+      return transaction.get(userRef).then(res => {
+          if (!res.exists) {
+              throw "Document does not exist!";
+          }
+
+          ratingArray = res.data().rating
+          // check if rated
+          let index = ratingArray.findIndex(function( rating ) {
+            return rating.ratedBy === ratedBy;
+          });
+          if(index >=0) {
+            ratingArray[index] = rating
+          }else {
+            ratingArray.push(rating)
+          }
+          // Compute new average rating
+          let numRatings = ratingArray.length;
+          let totalRating = 0
+          ratingArray.forEach(rating => {
+            totalRating += rating.rate
+          });
+          var newAvgRating = totalRating / numRatings
+          // Commit to Firestore
+          transaction.update(userRef, {
+              rating: ratingArray,
+              avgRating: newAvgRating
+          });
       })
     })
   })
