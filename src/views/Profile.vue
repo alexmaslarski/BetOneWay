@@ -101,7 +101,7 @@
              <v-col cols="6" class="pa-1">
                <v-card class="text-center py-6 px-2">
                  <v-list-item-subtitle class="secondary--text font-weight-medium">Profit</v-list-item-subtitle>
-                 <v-list-item-title class="title">{{getProfit}}u</v-list-item-title>
+                 <v-list-item-title class="title">{{getProfit.toFixed(2)}}u</v-list-item-title>
                </v-card>
              </v-col>
              <v-col cols="6" class="pa-1">
@@ -113,13 +113,13 @@
              <v-col cols="6" class="pa-1">
                <v-card class="text-center py-6 px-2">
                  <v-list-item-subtitle class="secondary--text font-weight-medium">Avg. odds</v-list-item-subtitle>
-                 <v-list-item-title class="title">{{getAvgOdd}}</v-list-item-title>
+                 <v-list-item-title class="title">{{getAvgOdd.toFixed(2)}}</v-list-item-title>
                </v-card>
              </v-col>
              <v-col cols="6" class="pa-1">
                <v-card class="text-center py-6 px-2">
                  <v-list-item-subtitle class="secondary--text font-weight-medium">Avg. Stake</v-list-item-subtitle>
-                 <v-list-item-title class="title">{{getAvgStake}} / 10</v-list-item-title>
+                 <v-list-item-title class="title">{{getAvgStake.toFixed(2)}} / 10</v-list-item-title>
                </v-card>
              </v-col>
            </v-row>

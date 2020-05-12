@@ -7,7 +7,7 @@
       elevate-on-scroll
       clipped-left
     >
-      <v-btn icon @click="drawer = true">
+      <v-btn icon @click="drawer = !drawer">
         <v-avatar v-if="getUser" size="25">
           <img :src="getUser.photoURL" alt="">
         </v-avatar>
@@ -17,7 +17,7 @@
 
       <v-img height="22px" contain :src="require('@/assets/logo.svg')"></v-img>
 
-      <v-btn icon>
+      <v-btn icon disabled="">
           <v-icon>mdi-bell-outline</v-icon>
       </v-btn>
     </v-app-bar>
@@ -61,14 +61,14 @@
       <span>Events</span>
         <v-icon>mdi-soccer</v-icon>
       </v-btn>
-      <v-btn>
+      <v-btn disabled>
         <v-icon>mdi-plus-box-outline</v-icon>
       </v-btn>
       <v-btn to="/tipsters" value="Tipsters">
         <span>Tipsters</span>
         <v-icon>mdi-account-check-outline</v-icon>
       </v-btn>
-      <v-btn to="/explore" value="Explore">
+      <v-btn disabled to="/explore" value="Explore">
         <span>Explore</span>
         <v-icon>mdi-earth</v-icon>
       </v-btn>
