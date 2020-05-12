@@ -76,7 +76,7 @@ const actions = {
       let combo;
       let conclusion = concludeBet(totalOdd);
       let profit
-
+      let eventIDs = []
       if(conclusion === 'Won') {
         profit = totalOdd * stake
       }else {
@@ -85,6 +85,7 @@ const actions = {
 
       state.betslip.length > 1 ? combo = true : combo = false;
       state.betslip.forEach(event => {
+        eventIDs.push(event.gameId)
         if(event.in_play){
           live = true;
         }
@@ -137,6 +138,8 @@ const actions = {
             });
         })
       }).then(() => {
+        console.log(eventIDs);
+        
         db.collection('posts').add({
           author: {
             name: auth.currentUser.displayName,
@@ -148,7 +151,8 @@ const actions = {
           comments: {},
           commentCount: 0,
           likes: 0,
-          likedBy: []
+          likedBy: [],
+          eventIDs
         })
         .then((docRef) => {
           db.collection('posts').doc(docRef.id).update({

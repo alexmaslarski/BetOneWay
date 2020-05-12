@@ -29,7 +29,9 @@
           <app-event-markets :markets="getMarkets"></app-event-markets>
         </v-tab-item>
         <v-tab-item>
-          <h2>Tab 2</h2>
+          <v-container>
+            <app-post v-for="post in getEventPosts" :key="post.id" :post="post"></app-post>
+          </v-container>
         </v-tab-item>
         <v-tab-item disabled>
           <h2>Tab 3</h2>
@@ -43,10 +45,12 @@
 <script>
 import { mapGetters } from 'vuex';
 import EventMarkets from '@/components/SingleEvent/EventMarkets.vue';
+import SinglePost from '@/components/Posts/SinglePost.vue';
 export default {
   name: 'Event',
   components: {
-    'app-event-markets': EventMarkets
+    'app-event-markets': EventMarkets,
+    'app-post': SinglePost
   },
   data() {
     return {
@@ -58,12 +62,16 @@ export default {
   watch: {
     '$route'(to) {
       this.id = to.params.id;
+      console.log('watch');
+      
+      this.updateEvent()
     }
   },
   computed: {
     ...mapGetters([
       'getEvent',
-      'getMarkets'
+      'getMarkets',
+      'getEventPosts'
     ]),
     homeScore () {
       return this.getEvent.score_full.substring(0, this.getEvent.score_full.indexOf(':'));
@@ -72,11 +80,18 @@ export default {
       return this.getEvent.score_full.substring(this.getEvent.score_full.indexOf(':') + 1);
     }
   },
-  created() {
-    this.$store.dispatch('loadEvent', this.id)
+  methods: {
+    updateEvent() {
+      this.$store.dispatch('loadEvent', this.id)
       .then(() => {
         this.loading = false;
     })
+    },
+  },
+  created() {
+    console.log(this.id);
+    
+    this.updateEvent()
   }
 }
 </script>

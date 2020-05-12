@@ -72,9 +72,6 @@ const actions = {
   followUser: firestoreAction((context, payload) => {
     let userID = payload;
     let followedBy = auth.currentUser.uid
-    console.log(userID);
-    console.log(followedBy);
-    
     if(userID !== followedBy) {
       db.collection('users').doc(userID).update({
         followers: firebase.firestore.FieldValue.arrayUnion(followedBy)

@@ -98,7 +98,7 @@ Vue.use(VueRouter)
         name: 'LiveEvents'
       },
       {
-        path: '/event/:id',
+        path: 'event/:id',
         component: Event,
         name: 'Event'
       }

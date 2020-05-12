@@ -1,7 +1,11 @@
 import axios from 'axios'
+import 'firebase/firestore'
+import { db } from '@/helpers/firebaseConfig'
+import { firestoreAction } from 'vuexfire'
 const state = {
   event: {},
-  markets: []
+  markets: [],
+  eventPosts: []
 };
 
 const getters = {
@@ -10,12 +14,14 @@ const getters = {
   },
   getMarkets: state => {
     return state.markets
+  },
+  getEventPosts: state => {
+    return state.eventPosts
   }
 }
 
 const mutations = {
   'UPDATE_EVENT': (state, event) => {
-    console.log(event);
     state.event = event;
   },
   'GROUP_MARKETS': (state, payload) => {
@@ -26,6 +32,7 @@ const mutations = {
 const actions = {
   async loadEvent ({commit, dispatch}, id) {
     let response;
+    dispatch('loadEventPosts', id)
     await dispatch('loadEventLine', id).then((res) => {
       response = res;
     })
@@ -65,13 +72,16 @@ const actions = {
         })
     })
   },
-    groupMarkets: ({commit, state}) => {
+  groupMarkets: ({commit, state}) => {
     let marketList = state.event.game_oc_list.reduce(function(h, obj) {
       h[obj.oc_group_name] = (h[obj.oc_group_name] || []).concat(obj);
       return h; 
     }, {});
     commit('GROUP_MARKETS', marketList);
-  }
+  },
+  loadEventPosts: firestoreAction(({ bindFirestoreRef}, payload) => {    
+    bindFirestoreRef('eventPosts', db.collection('posts').where('eventIDs', 'array-contains', payload.toString()));
+  })
 }
 
 export default {
