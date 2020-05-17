@@ -118,8 +118,6 @@ const actions = {
                 throw "Document does not exist!";
             }
             // total Posts
-            console.log(res.data().posts);
-            
             let totalPosts = res.data().posts.length + 1;
             // total Profit
             let totalProfit = res.data().totalProfit + profit;
@@ -146,7 +144,6 @@ const actions = {
         })
       }).then(() => {
         // then adds the post to firebase
-        
         db.collection('posts').add({
           author: {
             name: auth.currentUser.displayName,

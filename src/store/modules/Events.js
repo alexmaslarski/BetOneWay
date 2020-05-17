@@ -72,6 +72,7 @@ const actions = {
   loadLiveEvents: ({commit}) => {
     return new Promise((resolve, reject) => {
       // events/sport(0=all, 1=football)/tournamentID(0=all)/sub items/line or live/ en
+      // loads live events
       axios.get('/events/1/0/sub/0/live/en')
         .then(res => {
           commit('UPDATE_LIVE_EVENTS', res.data.body);

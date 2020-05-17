@@ -70,6 +70,7 @@ const actions = {
     bindFirestoreRef('profileInfo', db.collection('users').doc(uid))
     bindFirestoreRef('profilePosts', db.collection('posts').where('author.userID', '==', uid))
   }),
+
   followUser: firestoreAction((context, payload) => {
     let userID = payload;
     let followedBy = auth.currentUser.uid
@@ -141,35 +142,33 @@ const actions = {
     }
     let ratingArray
     var userRef = db.collection('users').doc(userID);
-    
     db.runTransaction(transaction => {
       return transaction.get(userRef).then(res => {
-          if (!res.exists) {
-              throw "Document does not exist!";
-          }
-
-          ratingArray = res.data().rating
-          // check if rated
-          let index = ratingArray.findIndex(function( rating ) {
-            return rating.ratedBy === ratedBy;
-          });
-          if(index >=0) {
-            ratingArray[index] = rating
-          }else {
-            ratingArray.push(rating)
-          }
-          // Compute new average rating
-          let numRatings = ratingArray.length;
-          let totalRating = 0
-          ratingArray.forEach(rating => {
-            totalRating += rating.rate
-          });
-          var newAvgRating = totalRating / numRatings
-          // Commit to Firestore
-          transaction.update(userRef, {
-              rating: ratingArray,
-              avgRating: newAvgRating
-          });
+        if (!res.exists) {
+            throw "Document does not exist!";
+        }
+        ratingArray = res.data().rating
+        // check if rated
+        let index = ratingArray.findIndex(function( rating ) {
+          return rating.ratedBy === ratedBy;
+        });
+        if(index >=0) {
+          ratingArray[index] = rating
+        }else {
+          ratingArray.push(rating)
+        }
+        // Compute new average rating
+        let numRatings = ratingArray.length;
+        let totalRating = 0
+        ratingArray.forEach(rating => {
+          totalRating += rating.rate
+        });
+        var newAvgRating = totalRating / numRatings
+        // Commit to Firestore
+        transaction.update(userRef, {
+            rating: ratingArray,
+            avgRating: newAvgRating
+        });
       })
     })
   })

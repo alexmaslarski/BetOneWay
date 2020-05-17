@@ -15,6 +15,7 @@ import SignIn from '@/views/SignIn.vue'
 import Login from '@/components/Login.vue'
 import Register from '@/components/Register.vue'
 import Tipsters from '@/views/Tipsters/Tipsters.vue'
+import Tutorial from '@/views/Tutorial.vue'
 
 Vue.use(VueRouter)
 
@@ -23,6 +24,11 @@ Vue.use(VueRouter)
     path: '/',
     name: 'Feed',
     component: Feed
+  },
+  {
+    path: '/tutorial',
+    name: 'Tutorial',
+    component: Tutorial
   },
   {
     path: '/post/:id',
@@ -36,14 +42,18 @@ Vue.use(VueRouter)
     props: true,
     beforeEnter: (to, from, next) => {
         function proceed () {
+          // Checks if user is loaded and if the user is authenticated
+          // or the link has and id, leading to another profile
           if (store.state.user.userLoaded) {
             if(store.state.user.user !== null || to.params.id){
               next()
+              // if not, it redirects to the login page
             }else {
               next('/signin/login')
             }
           }
         }
+        // if the user is still not loaded, it waits for him to load
         if (!store.state.user.userLoaded) {
           store.watch(
             (state) => state.user.userLoaded,

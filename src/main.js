@@ -6,10 +6,10 @@ import vuetify from './plugins/vuetify';
 import axios from 'axios';
 import VueToast from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-default.css';
-import Vuelidate from 'vuelidate'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import 'swiper/css/swiper.css'
 import BackBtn from '@/components/UI/backButton.vue';
+import VueCoreVideoPlayer from 'vue-core-video-player'
 
 // axios.defaults.baseURL = 'https://sports-odds-betapi.p.rapidapi.com/v1';
 // axios.defaults.headers.get['x-rapidapi-host'] = 'sports-odds-betapi.p.rapidapi.com';
@@ -19,10 +19,8 @@ import BackBtn from '@/components/UI/backButton.vue';
 axios.defaults.baseURL = 'https://betdta.com/v1';
 axios.defaults.headers.get['package'] = '655a50942823a0f022c2585000c71025';
 
-
+Vue.use(VueCoreVideoPlayer)
 Vue.component('app-back', BackBtn);
-
-Vue.use(Vuelidate)
 Vue.use(VueToast);
 Vue.config.productionTip = false
 Vue.use(require('vue-moment'));

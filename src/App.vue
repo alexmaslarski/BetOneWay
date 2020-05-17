@@ -39,6 +39,9 @@
       <v-btn to="/signin/login" block color="success" class="mb-3">Log in</v-btn>
       <v-btn to="/signin/signup" block color="secondary lighten-1 secondary--text">Sign up</v-btn>
       </div>
+      <div class="pa-2">
+          <v-btn to="/tutorial" block>Tutorial</v-btn>
+      </div>
       <!-- If user is logged in, show logout button -->
       <template v-if="getUser" v-slot:append>
         <div class="pa-2">
@@ -60,7 +63,7 @@
     </v-content>
 
     <!-- Bottom nav -->
-    <v-bottom-navigation app shift active-class="navigation-active" class="px-2">
+    <v-bottom-navigation app active-class="navigation-active" class="px-2">
       <v-btn to="/" value="Feed">
       <span>Feed</span>
         <v-icon>mdi-newspaper-variant-multiple-outline</v-icon>
