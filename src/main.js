@@ -10,7 +10,6 @@ import Vuelidate from 'vuelidate'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import 'swiper/css/swiper.css'
 import BackBtn from '@/components/UI/backButton.vue';
-import MarqueeText from 'vue-marquee-text-component'
 
 // axios.defaults.baseURL = 'https://sports-odds-betapi.p.rapidapi.com/v1';
 // axios.defaults.headers.get['x-rapidapi-host'] = 'sports-odds-betapi.p.rapidapi.com';
@@ -22,7 +21,6 @@ axios.defaults.headers.get['package'] = '655a50942823a0f022c2585000c71025';
 
 
 Vue.component('app-back', BackBtn);
-Vue.component('marquee-text', MarqueeText)
 
 Vue.use(Vuelidate)
 Vue.use(VueToast);
