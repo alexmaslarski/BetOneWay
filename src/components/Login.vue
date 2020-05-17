@@ -51,6 +51,7 @@ export default {
   methods: {
     onSignin () {
       this.$store.dispatch('signUserIn', {email: this.email, password: this.password})
+      this.$router.push('/')
     }
   },
   mounted() {
@@ -70,6 +71,7 @@ export default {
             }else {
               this.$store.dispatch('createUserInDB', authResult)
             }
+            this.$router.push('/')
           })
         }
       }

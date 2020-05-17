@@ -62,6 +62,7 @@ export default {
     },
   },
   created() {
+    // By default it orders tipsters by rating
     this.$store.dispatch('bindTipstersByRating')
     .then(() => {
         this.loading = false;

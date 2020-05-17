@@ -22,6 +22,7 @@ const actions = {
   bindPosts: firestoreAction(({ bindFirestoreRef }) => {
     bindFirestoreRef('posts', db.collection('posts').orderBy('bet.timeStamp', 'desc'))
   }),
+  // adds a comment
   addComment: firestoreAction((context, payload) => {
     if(auth.currentUser){
       let userID = auth.currentUser.uid;
@@ -36,12 +37,14 @@ const actions = {
         timeStamp,
         commentText
       }
+      // adds the comment to the post in firebase and increments commentCount
       db.collection('posts').doc(postID).update({
         comments: firebase.firestore.FieldValue.arrayUnion(comment),
         commentCount: increment
       })
     }
   }),
+  // adds a like and increments like count
   addLike: firestoreAction((context, payload) => {
     let postID = payload;
     let likedBy = auth.currentUser.uid
@@ -51,6 +54,7 @@ const actions = {
       likes: increment
     })
   }),
+  // removes like
   removeLike: firestoreAction((context, payload) => {
     let postID = payload;
     let likedBy = auth.currentUser.uid
@@ -61,27 +65,6 @@ const actions = {
     })
   })
 }
-//   isLiked: (context, postID) => {
-//     let likedBy = auth.currentUser.uid
-//     return db.collection('posts').doc(postID).get().then(snap => {
-//       var likesArray = snap.data().likedBy;
-//       let isLiked = false;
-//       if(likesArray.length > 0) {
-//         for (var i in likesArray) {
-//           var value = likesArray[i]
-//           if (value == likedBy){
-//             isLiked = true;
-//           }else {
-//             isLiked = false;
-//           }
-//         }
-//       }else {
-//         isLiked =  false
-//       }
-//       return isLiked
-//     });
-//   }
-// }
 
 export default {
   state,

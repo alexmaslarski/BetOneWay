@@ -39,6 +39,7 @@ const mutations = {
 }
 
 const actions = {
+  // adds a selection to the bet slip if user is authenticated
   updateBetSlip: ({commit, state}, payload) => {
     if(auth.currentUser){
       if(!state.betslip.find(bet => bet.pointer === payload.pointer)){
@@ -56,15 +57,20 @@ const actions = {
       });
     }
   },
+  // places bet / creates post
   placeBet: firestoreAction(({ state, dispatch }, payload) => {
+    // this function simulates the bet, in order to make statistics work
+    // this is necessary because the api package doesn't include match results
+    // so for presentation purposes I simulate the games
     function concludeBet (totalOdd) {
-      let rand = Math.random() * (totalOdd - 0) + 0;
+      let rand = Math.random() * totalOdd;
       if(rand <= 1) {
         return 'Won'
       }else {
         return 'Lost'
       }
     }
+    // sets up post information
     if(auth.currentUser){
       let userID = auth.currentUser.uid;
       let timeStamp = new Date();
@@ -90,6 +96,7 @@ const actions = {
           live = true;
         }
       });
+      // sets up bet information
       let bet = {
         selection: state.betslip,
         timeStamp,
@@ -103,8 +110,8 @@ const actions = {
         profit
       }
       var userRef = db.collection('users').doc(userID);
-      // var postRef = db.collection('posts');
 
+      // updates user's profile with new statistics
       db.runTransaction(transaction => {
         return transaction.get(userRef).then(res => {
             if (!res.exists) {
@@ -138,7 +145,7 @@ const actions = {
             });
         })
       }).then(() => {
-        console.log(eventIDs);
+        // then adds the post to firebase
         
         db.collection('posts').add({
           author: {
@@ -155,16 +162,18 @@ const actions = {
           eventIDs
         })
         .then((docRef) => {
+          // adds the post id as a field to the post
           db.collection('posts').doc(docRef.id).update({
             postID: docRef.id
           })
+          // references the post in the user's document
           db.collection('users').doc(userID).update({
             posts: firebase.firestore.FieldValue.arrayUnion(docRef)
           })
         })
       })
-  
       .then(() => {
+        // then it clears the bet slip and displays a toast
         dispatch('clearBetSlip')
         Vue.$toast.open({
           message: 'Bet Placed',

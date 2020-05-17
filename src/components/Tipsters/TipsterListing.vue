@@ -11,7 +11,7 @@ export default {
     'app-tipster-item': TipsterItem
   },
   props: {
-    tipsters: Object
+    tipsters: Array
   },
 }
 </script>

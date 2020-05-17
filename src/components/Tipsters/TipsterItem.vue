@@ -38,7 +38,7 @@ export default {
       let isSubscribed = false
       if(this.tipster.subscribers && this.tipster.subscribers.length > 0) {
         for (var i in this.tipster.subscribers) {
-          if (this.tipster.subscribers[i] == this.getUser.uid){
+          if (this.getUser && this.tipster.subscribers[i] == this.getUser.uid){
             isSubscribed = true;
           }
         }
@@ -51,11 +51,15 @@ export default {
   },
   methods: {
     handleSubscribe: function() {
-      let userID = this.tipster.id;
-      if(this.isSubscribed){
-        this.$store.dispatch('unsubscribe', userID)
+      if(this.getUser){
+        let userID = this.tipster.id;
+        if(this.isSubscribed){
+          this.$store.dispatch('unsubscribe', userID)
+        }else {
+          this.$store.dispatch('subscribe', userID)
+        }
       }else {
-        this.$store.dispatch('subscribe', userID)
+        this.$router.push('/signin/login')
       }
     }
   }

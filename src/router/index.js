@@ -35,11 +35,7 @@ Vue.use(VueRouter)
     component: Profile,
     props: true,
     beforeEnter: (to, from, next) => {
-      console.log(store.state.user);
-      
         function proceed () {
-          console.log('proceed');
-          
           if (store.state.user.userLoaded) {
             if(store.state.user.user !== null || to.params.id){
               next()
@@ -49,8 +45,6 @@ Vue.use(VueRouter)
           }
         }
         if (!store.state.user.userLoaded) {
-          console.log(store.state.user.userLoaded);
-          
           store.watch(
             (state) => state.user.userLoaded,
             (value) => {

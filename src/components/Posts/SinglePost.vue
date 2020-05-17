@@ -146,6 +146,7 @@ props: {
     user () {
       return this.$store.getters.getUser
     },
+    // checks if post is liked
     isLiked () {
       let likesArray = this.post.likedBy
       let isLiked = false
@@ -160,6 +161,7 @@ props: {
     }
   },
   methods: {
+    // adds comment to post
     addComment: function() {
       let comment = this.comment;
       let postID = this.post.postID;
@@ -173,6 +175,7 @@ props: {
         
       })
     },
+    // likes or unlikes
     handleLike: function() {
       let postID = this.post.postID;
       if(this.isLiked){

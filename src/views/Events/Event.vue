@@ -62,8 +62,6 @@ export default {
   watch: {
     '$route'(to) {
       this.id = to.params.id;
-      console.log('watch');
-      
       this.updateEvent()
     }
   },
@@ -81,6 +79,7 @@ export default {
     }
   },
   methods: {
+    // Loads event by id
     updateEvent() {
       this.$store.dispatch('loadEvent', this.id)
       .then(() => {
@@ -89,8 +88,6 @@ export default {
     },
   },
   created() {
-    console.log(this.id);
-    
     this.updateEvent()
   }
 }

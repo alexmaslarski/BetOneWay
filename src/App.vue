@@ -7,33 +7,39 @@
       elevate-on-scroll
       clipped-left
     >
-      <v-btn icon @click="drawer = !drawer">
+    <!-- On click show drawer -->
+      <v-btn icon @click="drawer = !drawer"> 
         <v-avatar v-if="getUser" size="25">
           <img :src="getUser.photoURL" alt="">
         </v-avatar>
         <v-icon v-else>mdi-login</v-icon>
       </v-btn>
 
-
+      <!-- logo -->
       <v-img height="22px" contain :src="require('@/assets/logo.svg')"></v-img>
 
+      <!-- Notification button -->
       <v-btn icon disabled="">
           <v-icon>mdi-bell-outline</v-icon>
       </v-btn>
     </v-app-bar>
+    
 
+    <!-- Navigation drawer -->
     <v-navigation-drawer
     app
     v-model="drawer"
     clipped
     left
     >
+    <!-- If a user is logged in, show profile info, else show log in and register buttons -->
     <app-nav-drawer-content v-if="getUser"></app-nav-drawer-content>
       <div class="pa-4" v-else>
         <v-card-title class="pl-0">Log in</v-card-title>
       <v-btn to="/signin/login" block color="success" class="mb-3">Log in</v-btn>
       <v-btn to="/signin/signup" block color="secondary lighten-1 secondary--text">Sign up</v-btn>
       </div>
+      <!-- If user is logged in, show logout button -->
       <template v-if="getUser" v-slot:append>
         <div class="pa-2">
           <v-btn @click='logOut' block>Logout</v-btn>
@@ -43,9 +49,11 @@
 
     <!-- Content -->
     <v-content>
+      <!-- Slide transition for when swithcing pages -->
       <transition name="slide" mode="out-in">
       <router-view></router-view>
       </transition>
+      <!-- Bet slip sheet -->
       <swipeable-bottom-sheet class="bottom-sheet" ref="swipeableBottomSheet">
       <app-bet-slip :isBetSlipOpen="isBetSlipOpen"></app-bet-slip>
       </swipeable-bottom-sheet>
@@ -82,7 +90,7 @@ import Vue from 'vue';
 import { mapGetters } from 'vuex';
 import firebase from "firebase";
 import BetSlip from '@/components/BetSlip/BetSlipListing'
-import NavDrawer from './components/UI/NavigationDrawer.vue'
+import NavDrawer from '@/components/UI/NavigationDrawer.vue'
 import { SwipeableBottomSheet } from "vue-swipeable-bottom-sheet";
 export default {
   name: 'App',
@@ -98,11 +106,12 @@ export default {
     }
   },
   mounted () {
+    // when user auth state changes, update current user
     firebase.auth().onAuthStateChanged(user => {
-      console.log(user);
-      
       this.$store.dispatch('updateUser', user)
     });
+
+    // watcher for bet slip state
     this.$refs.swipeableBottomSheet.setState("close")
     this.$watch(
         () => {
@@ -120,6 +129,7 @@ export default {
     ])
   },
   watch: {
+    // checks for bet slip count and controls the state of the bet slip
     getBetSlipCount(newState) {
       if(newState > 0 && this.$refs.swipeableBottomSheet.state !== "open") {
         this.$refs.swipeableBottomSheet.setState("half")
@@ -137,9 +147,6 @@ export default {
         type: 'info',
         dismissible: true
       });
-    },
-    goBack() {
-      return this.$router.go(-1);
     }
   }
 };

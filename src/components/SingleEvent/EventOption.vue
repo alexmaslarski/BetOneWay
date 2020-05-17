@@ -34,6 +34,7 @@ export default {
     addToBetSlip (market, selection, odd, pointer){
       this.isActive=!this.isActive
       let eventName = `${this.getEvent.opp_1_name} - ${this.getEvent.opp_2_name}`;
+      // extracts the game id from the bet pointer
       let gameId = /(.*?)\|/g.exec(pointer);
       let gameStart = this.getEvent.game_start;
       let tournament = this.getEvent.tournament_name;
@@ -49,6 +50,7 @@ export default {
       tournament,
       in_play
     }
+    // adds to bet slip
       this.$store.dispatch('updateBetSlip', betSelection)
     }
   }

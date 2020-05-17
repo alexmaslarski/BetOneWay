@@ -6,6 +6,7 @@
 </template>
 
 <script>
+// Single post page
 import { mapGetters } from 'vuex';
 import { mapActions } from 'vuex';
 import SinglePost from '@/components/Posts/SinglePost.vue';
@@ -21,6 +22,7 @@ export default {
     }
   },
   watch: {
+    // gets post by id and updates on id change
     getPosts() {
       this.updatePostByID();
     }
@@ -40,6 +42,7 @@ export default {
     ])
   },
   created() {
+    // when component is created, binds posts and updates component info
     this.$store.dispatch('bindPosts')
     this.updatePostByID();
   }

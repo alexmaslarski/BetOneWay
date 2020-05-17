@@ -65,6 +65,7 @@ const getters = {
 }
 
 const actions = {
+  // binds profile info and posts where the author matches the profile
   bindProfileInfo: firestoreAction(({ bindFirestoreRef }, uid) => {
     bindFirestoreRef('profileInfo', db.collection('users').doc(uid))
     bindFirestoreRef('profilePosts', db.collection('posts').where('author.userID', '==', uid))
@@ -72,16 +73,20 @@ const actions = {
   followUser: firestoreAction((context, payload) => {
     let userID = payload;
     let followedBy = auth.currentUser.uid
+    // checks if the user isn't following himself
     if(userID !== followedBy) {
+      // pushes id of the follower to the followers array of the person followed
       db.collection('users').doc(userID).update({
         followers: firebase.firestore.FieldValue.arrayUnion(followedBy)
       })
+      // updates the follower's following array
       db.collection('users').doc(followedBy).update({
         following: firebase.firestore.FieldValue.arrayUnion(userID)
       })
     }
   }),
   unfollowUser: firestoreAction((context, payload) => {
+    // opposite to following
     let userID = payload;
     let followedBy = auth.currentUser.uid
     if(userID !== followedBy) {
@@ -93,6 +98,7 @@ const actions = {
       })
     }
   }),
+  // same as following and unfollowing
   subscribe: firestoreAction((context, payload) => {
     let userID = payload;
     let subscribedBy = auth.currentUser.uid
@@ -118,12 +124,14 @@ const actions = {
       })
     }
   }),
+  // updates the user's bio
   updateBio: firestoreAction((context, payload) => {
     let userID = store.getters.getUser.uid
     db.collection('users').doc(userID).update({
       bio: payload
     })
   }),
+  // submits a new rating
   submitRating: firestoreAction((context, payload) => {
     let userID = payload.userID
     let ratedBy = store.getters.getUser.uid
@@ -131,9 +139,9 @@ const actions = {
       rate: payload.rate,
       ratedBy
     }
-    console.log(rating);
     let ratingArray
     var userRef = db.collection('users').doc(userID);
+    
     db.runTransaction(transaction => {
       return transaction.get(userRef).then(res => {
           if (!res.exists) {

@@ -84,6 +84,7 @@ const actions = {
         })
     })
   },
+  // loads both line and live events
   loadAllEvents: ({dispatch, commit, state}) => {
     return Promise.all([
       dispatch('loadLineEvents'),
@@ -91,6 +92,7 @@ const actions = {
     ]).finally(() => {
       let allEvents = state.lineTournaments.concat(state.liveTournaments);
 
+      // merges live and line events in tournaments
       let output = allEvents.reduce(function(o, cur) {
         // Get the index of the key-value pair.
         var occurs = o.reduce(function(n, item, i) {
@@ -103,7 +105,7 @@ const actions = {
           o[occurs].events_list = o[occurs].events_list.concat(cur.events_list);
           // Otherwise,
         } else {
-          // add the current item to o (but make sure the events_list is an array).
+          // add the current item to o
           var obj = {
             tournament_name: cur.tournament_name,
             tournament_id: cur.tournament_id,

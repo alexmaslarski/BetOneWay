@@ -3,7 +3,7 @@
       <v-card tile>
         <div class="d-flex justify-space-between">
         <v-card-subtitle><app-back></app-back></v-card-subtitle>
-        <v-card-subtitle @click="dialog = true" v-if="getUser.uid === getProfile.id"><v-icon>mdi-pencil</v-icon></v-card-subtitle>
+        <v-card-subtitle @click="dialog = true" v-if="getUser && getUser.uid === getProfile.id"><v-icon>mdi-pencil</v-icon></v-card-subtitle>
         </div>
         <v-list>
         <v-list-item>
@@ -150,8 +150,6 @@
 </template>
 
 <script>
-import Vue from 'vue';
-import firebase from "firebase";
 import { mapGetters } from 'vuex';
 import SinglePost from '@/components/Posts/SinglePost.vue';
 // import BetHistoryItem from '@/components/Profile/BetHistoryItem'
@@ -177,9 +175,10 @@ export default {
     };
   },
   computed: {
+    // Checks if current user is following this user
     isFollowed () {
       let isFollowed = false
-      if(this.getFollowers && this.getFollowers.length) {
+      if(this.getUser && this.getFollowers && this.getFollowers.length) {
         for (var i in this.getFollowers) {
           if (this.getFollowers[i] == this.getUser.uid){
             isFollowed = true;
@@ -188,9 +187,10 @@ export default {
       }
       return isFollowed;
     },
+    // Checks if current user is subscribed to this user
     isSubscribed () {
       let isSubscribed = false
-      if(this.getSubscribers && this.getSubscribers.length > 0) {
+      if(this.getUser && this.getSubscribers && this.getSubscribers.length > 0) {
         for (var i in this.getSubscribers) {
           if (this.getSubscribers[i] == this.getUser.uid){
             isSubscribed = true;
@@ -228,53 +228,56 @@ export default {
     }
   },
   methods: {
-    logOut() {
-      firebase.auth().signOut();
-      Vue.$toast.open({
-        message: 'Logged out',
-        position: 'bottom',
-        type: 'info',
-        dismissible: true
-      });
-    },
+    // Updates bio
     updateBio() {
     this.$store.dispatch('updateBio', this.bioText)
     this.dialog = false;
     this.bioText = '';
     },
+    // Submits new rating
     submitRating() {
-      console.log('rate');
-      
       let rating = {
         rate: this.newRating,
         userID: this.getProfile.id
       }
     this.$store.dispatch('submitRating', rating)
     },
+    // updates the profile data on user change
     updateUserProfile() {
     if(this.userID === ''){
       this.userID = this.getUser.uid;
     }
     this.$store.dispatch('bindProfileInfo', this.userID)
     },
+    // handles follow
     handleFollow: function() {
-      let userID = this.getProfile.id;
-      if(this.isFollowed){
-        this.$store.dispatch('unfollowUser', userID)
+      if(this.getUser){
+        let userID = this.getProfile.id;
+        if(this.isFollowed){
+          this.$store.dispatch('unfollowUser', userID)
+        }else {
+          this.$store.dispatch('followUser', userID)
+        }
       }else {
-        this.$store.dispatch('followUser', userID)
+        this.$router.push('/signin/login')
       }
     },
+    // Handles subscribe
     handleSubscribe: function() {
-      let userID = this.getProfile.id;
-      if(this.isSubscribed){
-        this.$store.dispatch('unsubscribe', userID)
-      }else {
-        this.$store.dispatch('subscribe', userID)
+      if(this.getUser){
+        let userID = this.getProfile.id;
+        if(this.isSubscribed){
+          this.$store.dispatch('unsubscribe', userID)
+        }else {
+          this.$store.dispatch('subscribe', userID)
+        }
+      }else{
+        this.$router.push('/signin/login')
       }
     }
   },
   created() {
+    // loads user profile on componenet creation
     this.updateUserProfile();
   }
 };

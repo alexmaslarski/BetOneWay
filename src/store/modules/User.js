@@ -21,10 +21,12 @@ const getters = {
 }
 
 const actions = {
+  // Registers user
   signUserUp ({dispatch}, payload) {
     firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
       .then(
         authResult => {
+          // creates user in db and updates current user information
           dispatch('createUserInDB', authResult)
           dispatch('updateUser', authResult)
         }
@@ -41,10 +43,12 @@ const actions = {
         }
       )
   },
+  // signs user in
   signUserIn ({dispatch}, payload) {
     firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
       .then(
         authResult => {
+          // updates user
           dispatch('updateExistingUser', authResult)
           dispatch('updateUser', authResult)
         }
@@ -65,11 +69,14 @@ const actions = {
     commit('UPDATE_USER', user);
   },
   updateExistingUser: firestoreAction((context, payload) => {
+    // only updates last sign in time in db
     db.collection('users').doc(payload.user.uid).update({
       lastSignIn: payload.user.metadata.lastSignInTime
     })
   }),
   createUserInDB: firestoreAction((context, payload) => {
+    // creates a new user document in the database with the user's id
+    // and sets all the needed fields
     db.collection('users').doc(payload.user.uid).set({
       name: payload.user.displayName,
       id: payload.user.uid,

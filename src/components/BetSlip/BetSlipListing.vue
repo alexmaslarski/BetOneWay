@@ -89,6 +89,7 @@ export default {
     'app-bet-slip-item': BetSlipItem
   },
   created() {
+    // updates the current time
     setInterval(this.getNow, 1000);
   },
   computed: {
@@ -102,7 +103,6 @@ export default {
   methods: {
     getNow: function() {
       this.now = this.$moment()
-
     },
     placeBet: function(){
       let totalOdd = this.getTotalOdd;

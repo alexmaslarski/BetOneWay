@@ -34,7 +34,6 @@ export default {
         slidesPerView: 'auto',
         spaceBetween: 12,
         slidesOffsetAfter: 24
-        // Some Swiper option/callback...
       }
     }
   }
