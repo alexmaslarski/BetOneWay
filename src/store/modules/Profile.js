@@ -68,7 +68,7 @@ const actions = {
   // binds profile info and posts where the author matches the profile
   bindProfileInfo: firestoreAction(({ bindFirestoreRef }, uid) => {
     bindFirestoreRef('profileInfo', db.collection('users').doc(uid))
-    bindFirestoreRef('profilePosts', db.collection('posts').where('author.userID', '==', uid))
+    bindFirestoreRef('profilePosts', db.collection('posts').where('author.userID', '==', uid).orderBy('bet.timeStamp', 'desc'))
   }),
 
   followUser: firestoreAction((context, payload) => {

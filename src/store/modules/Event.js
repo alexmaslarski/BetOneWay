@@ -87,7 +87,7 @@ const actions = {
   },
   // loads posts which include the event
   loadEventPosts: firestoreAction(({ bindFirestoreRef}, payload) => {    
-    bindFirestoreRef('eventPosts', db.collection('posts').where('eventIDs', 'array-contains', payload.toString()));
+    bindFirestoreRef('eventPosts', db.collection('posts').where('eventIDs', 'array-contains', payload.toString()).orderBy('bet.timeStamp', 'desc'));
   })
 }
 
