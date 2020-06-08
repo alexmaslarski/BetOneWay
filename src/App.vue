@@ -72,7 +72,7 @@
       <span>Events</span>
         <v-icon>mdi-soccer</v-icon>
       </v-btn>
-      <v-btn disabled>
+      <v-btn to="/new-post" value="New Post">
         <v-icon>mdi-plus-box-outline</v-icon>
       </v-btn>
       <v-btn to="/tipsters" value="Tipsters">

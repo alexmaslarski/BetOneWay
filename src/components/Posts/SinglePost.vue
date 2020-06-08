@@ -14,9 +14,12 @@
         </v-list-item-content>
         
         
-        <div>
+        <div v-if="post.bet.selection">
             <v-chip small v-if="post.bet.selection.length > 1" class="font-weight-medium" color="accent">COMBO</v-chip>
             <v-chip small v-if="post.bet.live" class="font-weight-medium ml-1" color="error">LIVE</v-chip>
+        </div>
+        <div v-else>
+            <v-chip small class="font-weight-medium" color="accent">POST</v-chip>
         </div>
         </v-list-item>
 
@@ -38,8 +41,14 @@
           </v-list-item-action>
         </v-list-item>
       </template>
+
+      <v-list-item v-if="post.bet.text" class="border double">
+          <v-list-item-content>
+            <p class="mb-0 body-1">{{post.bet.text}}</p>
+          </v-list-item-content>
+      </v-list-item>
         
-      <template v-if="post.bet.analysis.length > 0">
+      <template v-if="post.bet.selection && post.bet.analysis.length > 0">
         <v-btn v-if="!expanded" small text retain-focus-on-click block>Click to see analysis</v-btn>
         <v-list-item v-else>
           <v-list-item-content class="pb-0">
@@ -51,7 +60,7 @@
       <template>
         <v-list-item class="py-3">
           <v-list-item-content>
-            <v-row class="mx-0">
+            <v-row class="mx-0" v-if="post.bet.selection">
               <div class="mr-5 text-center">
                 <v-list-item-subtitle class="mb-1 caption text--secondary">Bookmaker</v-list-item-subtitle>
                 <v-chip small>Bet365</v-chip>
@@ -65,8 +74,14 @@
                 <v-chip small>{{post.bet.stake}}/10</v-chip>
               </div>
             </v-row>
+            <v-row class="mx-0" v-else>
+              <div class="mr-5 text-center">
+                <v-list-item-subtitle class="mb-1 caption text--secondary"></v-list-item-subtitle>
+                <v-chip small>Public</v-chip>
+              </div>
+            </v-row>
           </v-list-item-content>
-          <v-list-item-action>
+          <v-list-item-action class="justify-self-end">
             <v-btn
             @click.stop="handleLike"
             fab

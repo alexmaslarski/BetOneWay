@@ -16,6 +16,7 @@ import Login from '@/components/Login.vue'
 import Register from '@/components/Register.vue'
 import Tipsters from '@/views/Tipsters/Tipsters.vue'
 import Tutorial from '@/views/Tutorial.vue'
+import CreatePost from '@/views/CreatePost.vue'
 
 Vue.use(VueRouter)
 
@@ -34,6 +35,11 @@ Vue.use(VueRouter)
     path: '/post/:id',
     name: 'Post',
     component: Post
+  },
+  {
+    path: '/new-post',
+    name: 'CreatePost',
+    component: CreatePost
   },
   {
     path: '/profile/:id?',

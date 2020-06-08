@@ -4,6 +4,7 @@ import events from './modules/Events'
 import event from './modules/Event'
 import posts from './modules/Posts/Posts'
 import createBet from './modules/Posts/CreateBet'
+import createPost from './modules/Posts/CreatePost'
 import user from './modules/User'
 import profile from './modules/Profile'
 import tipsters from './modules/Tipsters'
@@ -23,6 +24,7 @@ export default new Vuex.Store({
     profile,
     posts,
     createBet,
+    createPost,
     tipsters
   }
 })
