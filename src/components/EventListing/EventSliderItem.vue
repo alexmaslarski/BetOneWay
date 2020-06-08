@@ -6,7 +6,7 @@
         <v-list-item-content>
         <div>
           <p class="caption text--secondary mb-1">Active Tips</p>
-          <v-chip small color="accent" class="white--text font-weight-medium">251</v-chip>
+          <v-chip small color="accent" class="white--text font-weight-medium">{{event.posts_count}}</v-chip>
         </div>
 
         </v-list-item-content>

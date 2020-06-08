@@ -8,7 +8,7 @@
         <app-event-slider-item-live v-for="event in liveEventsList" :key="event.game_id" :event="event"></app-event-slider-item-live>
       </swiper>
       <swiper ref="mySwiper" v-if="type==='regular'" :options="swiperOptions" class="mx-n3">
-        <app-event-slider-item v-for="event in liveEventsList" :key="event.game_id" :event="event"></app-event-slider-item>
+        <app-event-slider-item v-for="event in hotEventsList" :key="event.game_id" :event="event"></app-event-slider-item>
       </swiper>
   </div>
 </template>
@@ -23,6 +23,7 @@ export default {
   },
   props: {
     liveEventsList: Array,
+    hotEventsList: Array,
     title: String,
     type: String,
     link: String

@@ -10,7 +10,7 @@
     </app-event-slider>
 
     <app-event-slider
-    :liveEventsList = getLiveEventsList
+    :hotEventsList = getHotEventsList
     title = "Hot Games"
     type="regular"
     class="mb-3">
@@ -42,6 +42,7 @@ export default {
       'getAllTournaments',
       'getLiveTournaments',
       'getLiveEventsList',
+      'getHotEventsList',
       'getLineTournaments'
     ])
   },

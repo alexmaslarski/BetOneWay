@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { db } from '@/helpers/firebaseConfig'
 const state = {
   lineTournaments: [],
   liveTournaments: [],
@@ -25,6 +26,18 @@ const getters = {
         eventList.push(event);
       })
     });
+    return eventList;
+  },
+  getHotEventsList: state => {
+    let eventList = [];
+    state.allTournaments.forEach(tournament => {
+      tournament.events_list.forEach( event => {
+        if(event.posts_count > 0){
+          eventList.push(event);
+        }
+      })
+    });
+    eventList.sort((a, b) => {a.posts_count - b.posts_count})
     return eventList;
   },
   // Get events in tournament live
@@ -116,9 +129,34 @@ const actions = {
         }
         return o;
       }, []);
-      commit('UPDATE_ALL_EVENTS',output);
+
+
+        output.forEach((tournament, index, array) => {
+          tournament.events_list.forEach(event => {
+            dispatch('loadEventPostsCount', event.game_id)
+            .then(res => {
+              event.posts_count = res;
+            })
+            .finally(() => {
+              
+              if (index === array.length -1){
+                console.log(index);
+                commit('UPDATE_ALL_EVENTS', output);
+              }
+            })
+          })
+        })
+      
+      
 
     })
+  },
+  loadEventPostsCount: (context, payload) => {
+    return db.collection('posts').where('eventIDs', 'array-contains', payload.toString()).get()
+    .then(querySnapshot => {
+      const documents = querySnapshot.docs.map(doc => doc.data())
+      return documents.length;
+    });
   }
 }
 
